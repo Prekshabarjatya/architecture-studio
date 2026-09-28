@@ -185,6 +185,7 @@ html:not(.motion) .hl{background-size:100% 88%;color:#fff}
 .hero .shift ul{background:#fff;color:#0A0A0A}
 .hero .shift ul a:hover,.hero .shift ul a[aria-current="true"]{background:#0A0A0A;color:#fff}
 @media (max-width:900px){.hero .shift{top:var(--m)}}
+.fnav{display:flex;gap:1.6em}
 </style>
 </head>
 <body>
@@ -192,13 +193,13 @@ html:not(.motion) .hl{background-size:100% 88%;color:#fff}
 <header class="hdr dark" id="hdr">
   <div class="wrap">
     <a class="logo" href="index.html" aria-label="Space-in home">Space<span class="bar"></span>in</a>
-    <nav class="mainnav" aria-label="Main"><a class="ulink" href="projects.html">Projects</a><a class="ulink" href="index.html#intro">Studio</a><a class="ulink" href="index.html#journal">Journal</a></nav>
+    <nav class="mainnav" aria-label="Main"><a class="ulink" href="projects.html">Projects</a><a class="ulink" href="studio.html">Studio</a><a class="ulink" href="journal.html">Journal</a></nav>
     <div class="hright"><a class="cta" href="index.html#talk">Contact <svg class="dots" viewBox="0 0 24 24" aria-hidden="true"><circle cx="21.00" cy="12.00" r="1.10"/><circle cx="18.36" cy="18.36" r="1.32"/><circle cx="12.00" cy="21.00" r="1.54"/><circle cx="5.64" cy="18.36" r="1.76"/><circle cx="3.00" cy="12.00" r="1.98"/><circle cx="5.64" cy="5.64" r="2.20"/><circle cx="12.00" cy="3.00" r="2.42"/><circle cx="18.36" cy="5.64" r="2.64"/></svg></a><button class="mbtn" id="mBtn" aria-expanded="false" aria-controls="mmenu">Menu</button></div>
   </div>
 </header>
 <div class="mmenu" id="mmenu" role="dialog" aria-modal="true" aria-label="Menu">
   <div class="row"><span class="logo" style="font-size:22px;font-weight:500;letter-spacing:-.045em">Space | in</span><button class="x" id="mClose">Close</button></div>
-  <nav><a href="projects.html">Projects</a><a href="index.html#intro">Studio</a><a href="index.html#journal">Journal</a><a href="index.html#talk">Contact</a></nav>
+  <nav><a href="projects.html">Projects</a><a href="studio.html">Studio</a><a href="journal.html">Journal</a><a href="index.html#talk">Contact</a></nav>
   <div class="meta"><span>studio@space-in.example</span><span>+91 731 000 0000 · Indore</span></div>
 </div>
 
@@ -260,7 +261,7 @@ html:not(.motion) .hl{background-size:100% 88%;color:#fff}
     <p class="label">Next focus</p>
     <p class="t"><span id="nextName">Interiors</span><i aria-hidden="true">→</i></p>
   </a>
-  <div class="foot"><span>Space-in® 2026 · Architecture + Interiors · Indore, Madhya Pradesh</span><a class="ulink" href="index.html#talk">Let's talk</a></div>
+  <div class="foot"><span>Space-in® 2026 · Architecture + Interiors · Indore, Madhya Pradesh</span><nav class="fnav"><a class="ulink" href="projects.html">Projects</a><a class="ulink" href="studio.html">Studio</a><a class="ulink" href="journal.html">Journal</a></nav></div>
 </div></div>
 <div class="wipe" id="wipe" aria-hidden="true"></div>
 
