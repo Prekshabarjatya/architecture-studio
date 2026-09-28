@@ -918,7 +918,10 @@ const G = window.gsap, ST = window.ScrollTrigger;
 const textSel='main .section-label, main h2, .intro .r4 p, .intro .r4 a, .stmt p, .planwrap .pcopy > *, .jrow, .pcard, .ccard > *, .work-head .filters, .curtain .label, .curtain a';
 
 const scroller=$('#scroller');
-const own = innerHeight >= 400 && innerHeight <= Math.max(screen.height,900)*1.25;
+// Its own scroll box is only needed inside the Claude artifact frame; a normal website scrolls the page itself,
+// which lets phones pin sections smoothly.
+const own = window.self !== window.top && innerHeight >= 400 && innerHeight <= Math.max(screen.height,900)*1.25;
+const OWN = own;
 if(own) document.documentElement.classList.add('own');
 const SC = own ? scroller : window;
 const scTop = () => own ? scroller.scrollTop : scrollY;
@@ -939,6 +942,9 @@ function ruler(y,max){
 if(!G || !ST){ finishWithoutMotion('animation library did not load'); return; }
 G.registerPlugin(ST);
 if(own) ST.defaults({ scroller });
+// Phones scroll natively (nothing is pinned there); only ignore the address bar resizing so nothing jumps.
+ST.config({ ignoreMobileResize:true });
+
 if(window.CustomEase){ G.registerPlugin(CustomEase); CustomEase.create('settle','.2,.7,.1,1'); CustomEase.create('door','.7,0,.2,1'); }
 const EASE = { settle: window.CustomEase ? 'settle' : 'power3.out', door: window.CustomEase ? 'door' : 'power3.inOut' };
 const M = {
@@ -988,8 +994,8 @@ const mm = G.matchMedia();
 mm.add({ wide:'(min-width:900px)', narrow:'(max-width:899px)', calm:'(prefers-reduced-motion:reduce)' }, ctx=>{
   const { wide, calm } = ctx.conditions;
   const fx = panels.map(p=>p.querySelectorAll('.fx'));
-  // Same scroll effects on every screen size; only Reduce Motion gets the flat, static layout.
-  if(calm){ stage.classList.add('flat'); G.set(fx.flat(),{clearProps:'all'}); return ()=>stage.classList.remove('flat'); }
+  // Pinned sideways effects are for large screens; phones get natural vertical scrolling with swipe rows.
+  if(!wide || calm){ stage.classList.add('flat'); G.set(fx.flat(),{clearProps:'all'}); return ()=>stage.classList.remove('flat'); }
   stage.classList.remove('flat');
   const cleanupProc = () => { $('#process').classList.remove('pinned'); G.set(cardsEl,{clearProps:'transform'}); goPhase = i => $('#pc'+i).scrollIntoView({block:'nearest'}); };
   const dist = () => Math.max(0, track.scrollWidth - innerWidth*M.stage.endAt);

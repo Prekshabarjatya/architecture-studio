@@ -25,9 +25,10 @@
 }
 @media (max-width:640px){:root{--m:16px;--section:72px;--fs-mega:21vw}}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;overflow:hidden}
+html,body{margin:0}
+html.own,html.own body{height:100%;overflow:hidden} /* scroll box only inside the Claude artifact frame */
 body{background:var(--white);color:var(--ink);font:400 var(--fs-body)/1.6 var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
-#scroller{height:100%;overflow-y:auto;overflow-x:hidden}
+html.own #scroller{height:100%;overflow-y:auto;overflow-x:hidden}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
 .lenis.lenis-stopped{overflow:hidden}
 a{color:inherit;text-decoration:none}
@@ -376,19 +377,23 @@ render(location.hash.slice(1));
 /* =====================================================================
    Motion: Lenis + GSAP ScrollTrigger, same engine and timings as the other pages.
    ===================================================================== */
-const G=window.gsap, ST=window.ScrollTrigger, scroller=$('#scroller'), hdr=$('#hdr');
+const G=window.gsap, ST=window.ScrollTrigger, scroller=$('#scroller'), OWN=window.self!==window.top, SCR=OWN?$('#scroller'):document.scrollingElement, SCE=OWN?$('#scroller'):window, hdr=$('#hdr');
 const calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
-const plainGo = k => { history.replaceState(null,'','#'+k); render(k); scroller.scrollTop=0; };
+const plainGo = k => { history.replaceState(null,'','#'+k); render(k); SCR.scrollTop=0; };
 if(!G || !ST || !window.Lenis || calm){
   go = plainGo;
-  scroller.addEventListener('scroll',()=>{ hdr.className='hdr '+(scroller.scrollTop < innerHeight*.9 ? 'dark':'light'); const steps=[...document.querySelectorAll('.step')]; steps.forEach((el,j)=>{ const r=el.getBoundingClientRect(); if(r.top<innerHeight*.5 && r.bottom>innerHeight*.5) setStep(j); }); },{passive:true});
+  SCE.addEventListener('scroll',()=>{ hdr.className='hdr '+(SCR.scrollTop < innerHeight*.9 ? 'dark':'light'); const steps=[...document.querySelectorAll('.step')]; steps.forEach((el,j)=>{ const r=el.getBoundingClientRect(); if(r.top<innerHeight*.5 && r.bottom>innerHeight*.5) setStep(j); }); },{passive:true});
   return;
 }
-G.registerPlugin(ST); ST.defaults({ scroller });
+if(OWN) document.documentElement.classList.add('own');
+G.registerPlugin(ST); if(OWN) ST.defaults({ scroller });
+// Phones scroll natively (nothing is pinned there); only ignore the address bar resizing so nothing jumps.
+ST.config({ ignoreMobileResize:true });
+
 if(window.CustomEase){ G.registerPlugin(CustomEase); CustomEase.create('settle','.2,.7,.1,1'); CustomEase.create('door','.7,0,.2,1'); }
 const EASE={ settle: window.CustomEase?'settle':'power3.out', door: window.CustomEase?'door':'power3.inOut' };
 document.documentElement.classList.add('motion');
-const lenis = new Lenis({ wrapper:scroller, content:$('#content'), lerp:0.09, smoothWheel:true, wheelMultiplier:0.9 });
+const lenis = new Lenis(Object.assign({ lerp:0.09, smoothWheel:true, wheelMultiplier:0.9 }, OWN ? { wrapper:scroller, content:$('#content') } : {}));
 lenis.on('scroll', ST.update);
 G.ticker.add(t=>lenis.raf(t*1000)); G.ticker.lagSmoothing(0);
 
@@ -427,8 +432,8 @@ function build(){
   headerState();
 }
 // The header style follows the scroll position directly (also works where touch scrolling bypasses the smooth scroller).
-function headerState(){ hdr.className = 'hdr ' + (scroller.scrollTop < $('#hero').offsetHeight - 64 ? 'dark' : 'light'); }
-scroller.addEventListener('scroll', headerState, { passive:true });
+function headerState(){ hdr.className = 'hdr ' + (SCR.scrollTop < $('#hero').offsetHeight - 64 ? 'dark' : 'light'); }
+SCE.addEventListener('scroll', headerState, { passive:true });
 afterRender = () => {}; build();
 
 /* switching sector: a black wipe rises, the page changes behind it, the wipe leaves upward */

@@ -23,9 +23,10 @@
 }
 @media (max-width:640px){:root{--m:16px;--pic:46vw;--fs-mega:17vw}} /* phones: photo and line scaled up so the hero still reads */
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;overflow:hidden}
+html,body{margin:0}
+html.own,html.own body{height:100%;overflow:hidden} /* scroll box only inside the Claude artifact frame */
 body{background:var(--white);color:var(--ink);font:400 var(--fs-body)/1.6 var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
-#scroller{height:100%;overflow-y:auto;overflow-x:hidden}
+html.own #scroller{height:100%;overflow-y:auto;overflow-x:hidden}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
 .lenis.lenis-stopped{overflow:hidden}
 a{color:inherit;text-decoration:none}
@@ -345,7 +346,7 @@ if(matchMedia('(hover:hover)').matches){
 /* =====================================================================
    Motion: Lenis + GSAP ScrollTrigger, same engine and timings as the homepage.
    ===================================================================== */
-const G=window.gsap, ST=window.ScrollTrigger, scroller=$('#scroller'), ld=$('#ld'), stage=$('#stage'), herocard=$('#herocard');
+const G=window.gsap, ST=window.ScrollTrigger, scroller=$('#scroller'), OWN=window.self!==window.top, SCR=OWN?$('#scroller'):document.scrollingElement, SCE=OWN?$('#scroller'):window, ld=$('#ld'), stage=$('#stage'), herocard=$('#herocard');
 const calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
 const jump = el => el.scrollIntoView({block:'start'});
 document.querySelectorAll('.scard').forEach(c=>c.addEventListener('click',e=>{ e.preventDefault(); setFilter(c.dataset.f); go($('#list')); }));
@@ -354,11 +355,15 @@ $('#toList').onclick=()=>go($('#list'));
 
 function flat(){ stage.classList.add('flat'); ld.classList.add('done'); $('#toSel').onclick=()=>jump($('#cards')); }
 if(!G || !ST || !window.Lenis || calm){ flat(); return; }
-G.registerPlugin(ST); ST.defaults({ scroller });
+if(OWN) document.documentElement.classList.add('own');
+G.registerPlugin(ST); if(OWN) ST.defaults({ scroller });
+// Phones scroll natively (nothing is pinned there); only ignore the address bar resizing so nothing jumps.
+ST.config({ ignoreMobileResize:true });
+
 if(window.CustomEase){ G.registerPlugin(CustomEase); CustomEase.create('settle','.2,.7,.1,1'); CustomEase.create('door','.7,0,.2,1'); }
 const EASE={ settle: window.CustomEase?'settle':'power3.out', door: window.CustomEase?'door':'power3.inOut' };
 
-const lenis = new Lenis({ wrapper:scroller, content:$('#content'), lerp:0.09, smoothWheel:true, wheelMultiplier:0.9 });
+const lenis = new Lenis(Object.assign({ lerp:0.09, smoothWheel:true, wheelMultiplier:0.9 }, OWN ? { wrapper:scroller, content:$('#content') } : {}));
 lenis.on('scroll', ST.update);
 G.ticker.add(t=>lenis.raf(t*1000)); G.ticker.lagSmoothing(0);
 go = el => lenis.scrollTo(el,{ duration:1.4 });
@@ -386,7 +391,9 @@ const mm=G.matchMedia();
 mm.add({ wide:'(min-width:900px)', narrow:'(max-width:899px)' }, ctx=>{ // object form only fires when a condition matches, so both are listed
   const cards=[...document.querySelectorAll('.scard')];
   // Same zoom-out on phones; there the five cards then slide sideways so all of them pass by.
-  const narrow = !ctx.conditions.wide;
+  // Phones: no pinned zoom-out; the hero and a swipe row of sector cards simply follow each other.
+  if(!ctx.conditions.wide){ stage.classList.add('flat'); $('#toSel').onclick=()=>go($('#cards')); return ()=>stage.classList.remove('flat'); }
+  const narrow = false;
   stage.classList.remove('flat');
   G.set(cards,{ yPercent:-18, opacity:0 });
   const cardsRow=$('#cards'), slide=()=>Math.max(0, cardsRow.scrollWidth - innerWidth);
@@ -416,7 +423,7 @@ ST.batch('.lrow',{ start:'top 95%', onEnter:b=>G.fromTo(b,{opacity:0,y:14},{opac
 const pics=['hero','courtyard-house','kund-cafe','brick-villa','stepwell-library','lime-plaster-apartment','terrace-residence','hero'];
 $('#ldwin').innerHTML = pics.map((p,i)=>`<img src="photos/${p}.jpg" alt=""${i===0?' class="on"':''}>`).join('');
 const frames=[...document.querySelectorAll('#ldwin img')], count={v:0};
-lenis.stop(); scroller.scrollTop=0;
+lenis.stop(); SCR.scrollTop=0;
 G.set('.marq .row span, .herocopy > *, .herofoot > *',{ opacity:0, y:30 });
 G.timeline()
   .to(count,{ v:100, duration:2.2, ease:'power2.inOut', onUpdate:()=>{
