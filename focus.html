@@ -109,7 +109,8 @@ html:not(.motion) .hl{background-size:100% 88%;color:#fff}
 .step .body p{max-width:52ch}
 .step dl{display:grid;grid-template-columns:auto 1fr;gap:.4em 1.6em;margin:0;font-size:var(--fs-small)}
 .step dt{color:var(--muted)}.step dd{margin:0}
-@media (max-width:900px){.pgrid{grid-template-columns:1fr}.pnum{position:relative;top:0;margin-bottom:24px}.step{grid-template-columns:1fr;min-height:0;opacity:1}}
+/* Phones keep the pinned number: it sticks under the header while the steps scroll beneath it. */
+@media (max-width:900px){.pgrid{grid-template-columns:1fr}.pnum{top:64px;z-index:2;background:var(--white);padding-block:10px 14px;margin-bottom:8px}.pnum .roll{height:calc(var(--fs-mega) * .82)}.pnum .ptitle{min-height:0;font-size:20px}.step{grid-template-columns:1fr;min-height:48svh}}
 
 /* ---------- receive + principles ---------- */
 .rows{padding-bottom:var(--section)}
@@ -120,6 +121,8 @@ html:not(.motion) .hl{background-size:100% 88%;color:#fff}
 .rrow p{color:var(--muted);max-width:56ch}
 .rrow:hover .n{color:var(--ink)}
 @media (max-width:760px){.rrow{grid-template-columns:auto 1fr}.rrow p{grid-column:2}}
+/* Phones: titles carry the page; long explanations stay on desktop */
+@media (max-width:640px){.rrow p{display:none}.cols .r p:nth-child(n+2){display:none}.step dl dt:nth-of-type(2),.step dl dd:nth-of-type(2){display:none}.hero .tag{font-size:16px}}
 
 /* ---------- highlighted projects ---------- */
 .hp{padding-bottom:var(--section)}

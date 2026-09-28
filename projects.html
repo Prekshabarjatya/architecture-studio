@@ -106,7 +106,19 @@ img{display:block;max-width:100%}
   .stage.flat .cards::-webkit-scrollbar{display:none}
   .stage.flat .scard{flex:0 0 62vw;height:calc(62vw * 1.618);aspect-ratio:auto;scroll-snap-align:start}
   .pill{font-size:14px;padding:.5em 1em}
+  /* zoom-out on phones: cards in one row above the shrunken hero, sliding left as you scroll */
+  .stage:not(.flat) .cards{justify-content:flex-start;height:50svh;top:76px;gap:10px}
+  .stage:not(.flat) .scard{flex:0 0 min(46vw,calc(50svh / 1.618 * 1.0))}
+  .stage:not(.flat) .scard .desc{display:none}
+  .stage:not(.flat) .scard h2{font-size:26px}
   .lhead h2{font-size:40px}
+  .lhead,.ctrls{width:100%}
+  .filters{flex:1 1 100%}
+  /* lighter on phones: name and city only, the details line is desktop-only */
+  .pc .facts{display:none}
+  .herocopy p{font-size:16px}
+  .herocopy p br{display:none}
+  .stage.flat .scard .desc{display:none}
 }
 
 /* ---------- project list ---------- */
@@ -114,8 +126,8 @@ img{display:block;max-width:100%}
 .lhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:24px;border-bottom:1px solid var(--hair);padding-bottom:max(18px,1.4vw);margin-bottom:max(28px,2.4vw)}
 .lhead h2{font-size:var(--fs-xl);letter-spacing:-.038em;line-height:1}
 .lhead h2 sup{font-size:.28em;letter-spacing:0;vertical-align:top;margin-left:.2em;font-variant-numeric:tabular-nums}
-.ctrls{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center}
-.filters{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.ctrls{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center;min-width:0;max-width:100%} /* min-width:0 lets the chip row scroll inside instead of widening the page */
+.filters{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;max-width:100%;min-width:0}
 .filters button{border:1px solid var(--hair);border-radius:999px;padding:.5em 1em;font-size:var(--fs-small);white-space:nowrap}
 .filters button sup{font-size:.7em;margin-left:2px}
 .filters button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -346,16 +358,19 @@ lenis.on('scroll', e=>{ G.to(loop,{ timeScale:1+Math.min(4,Math.abs(e.velocity)/
 const mm=G.matchMedia();
 mm.add({ wide:'(min-width:900px)', narrow:'(max-width:899px)' }, ctx=>{ // object form only fires when a condition matches, so both are listed
   const cards=[...document.querySelectorAll('.scard')];
-  if(!ctx.conditions.wide){ stage.classList.add('flat'); $('#toSel').onclick=()=>go($('#cards')); return ()=>stage.classList.remove('flat'); }
+  // Same zoom-out on phones; there the five cards then slide sideways so all of them pass by.
+  const narrow = !ctx.conditions.wide;
   stage.classList.remove('flat');
   G.set(cards,{ yPercent:-18, opacity:0 });
-  const tl=G.timeline({ defaults:{ ease:'none' }, scrollTrigger:{ trigger:stage, start:'top top', end:'+=120%', pin:true, scrub:0.6, invalidateOnRefresh:true } });
+  const cardsRow=$('#cards'), slide=()=>Math.max(0, cardsRow.scrollWidth - innerWidth);
+  const tl=G.timeline({ defaults:{ ease:'none' }, scrollTrigger:{ trigger:stage, start:'top top', end:narrow?'+=260%':'+=120%', pin:true, scrub:0.6, invalidateOnRefresh:true } });
   tl.to(stage,{ backgroundColor:'#E7E7E7', duration:0.3 },0)
     .to(herocard,{ scale:0.42, y:()=>innerHeight*0.1, duration:0.7, ease:'power1.inOut' },0)
     .to(cards,{ yPercent:0, opacity:1, duration:0.45, stagger:0.07, ease:'power2.out' },0.25);
+  if(narrow) tl.to(cardsRow,{ x:()=>-slide(), duration:1.2 },0.75);
   $('#toSel').onclick=()=>lenis.scrollTo(tl.scrollTrigger.end,{ duration:1.6 });
   herocard.addEventListener('click',e=>{ if(tl.progress()>0.5 && !e.target.closest('button')) lenis.scrollTo(0,{ duration:1.4 }); });
-  return ()=>G.set(cards,{ clearProps:'all' });
+  return ()=>{ G.set(cards,{ clearProps:'all' }); G.set(cardsRow,{ clearProps:'transform' }); };
 });
 
 /* project cards: photos unmask upward, captions blur into focus */

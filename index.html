@@ -351,22 +351,45 @@ section{scroll-margin-top:80px}
   .stage.flat{background:var(--plaster)}
   .stage.flat .track{flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;padding:0 16px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .stage.flat .track::-webkit-scrollbar{display:none}
-  .stage.flat .panel{flex:0 0 78vw;width:78vw;height:calc(78vw * 1.618);scroll-snap-align:start}
-  .stage.flat .panel .ph{flex:0 0 61.8%;height:auto}
+  .stage.flat .panel{flex:0 0 78vw;width:78vw;height:auto;scroll-snap-align:start}
+  .stage.flat .panel .ph{aspect-ratio:1/1}
+  .stage.flat .panel .ph{flex:none;height:auto}
   .stage.flat .panel .blk{flex:1;height:auto;padding:18px}
   .stage.flat .panel .subs{display:none}
-  .stage.flat .panel .plus{top:calc(61.8% + 18px);right:18px}
+  .stage.flat .panel .plus{top:calc(78vw + 18px);right:18px}
   .stage.flat .panel h3{font-size:28px}
   /* process: swipe through the five cards, same φ card as desktop */
   .process .cards-vp{overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(var(--m) * -1);padding-inline:var(--m);scrollbar-width:none}
   .process .cards-vp::-webkit-scrollbar{display:none}
   .process:not(.pinned) .cards{flex-wrap:nowrap}
-  .process:not(.pinned) .pcard{--w:78vw;flex:0 0 var(--w);scroll-snap-align:start}
+  .process:not(.pinned) .pcard{--w:78vw;flex:0 0 var(--w);height:auto;min-height:calc(var(--w) * 1.2);scroll-snap-align:start}
+  .process:not(.pinned) .pcard .top{flex:0 0 auto;min-height:calc(var(--w) * .9)}
   .pcard .top h3{font-size:24px}
   /* floor plan: room names readable at phone size */
   .plan text{font-size:17px}
   .plan text.scale{font-size:13px}
   .planwrap .drawing{padding:12px}
+  /* pinned effects on phones: panels nearly full width, a thin strip of the next one peeks in */
+  .stage:not(.flat) .track{padding-left:calc(100vw - 36px)}
+  .stage:not(.flat) .panel{flex:0 0 84vw}
+  .stage:not(.flat) .panel .blk{padding:18px}
+  .stage:not(.flat) .panel .subs{display:none}
+  .stage:not(.flat) .panel .plus{right:18px;top:calc(61.8% + 18px)}
+  .hero h1{max-width:12ch}
+  /* pinned process on phones: card sized to fit the screen height too */
+  .process.pinned .pcard{--w:min(76vw,44svh)}
+  .process.pinned .cards-vp{overflow:hidden;margin-inline:0;padding-inline:0}
+  /* less reading on phones: one short line per idea, details stay on desktop */
+  .stage.flat .panel .side{display:none}
+  .pcard .bot{gap:10px}
+  .pcard .bot > div:last-child{display:none}
+  .intro .r4 p{font-size:15px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .planwrap .pcopy p:not(.label){display:none}
+  .slide .brief{display:none}
+  .slide .facts span:nth-child(n+3){display:none}
+  .jrow .jtag{display:none}
+  .fcols > div:nth-child(n+3){display:none}
+  .note{display:none}
   /* statements and sections: tighter rhythm */
   .statement.big{font-size:40px}
   .featured{min-height:560px;height:88svh}
@@ -924,7 +947,8 @@ const mm = G.matchMedia();
 mm.add({ wide:'(min-width:900px)', narrow:'(max-width:899px)', calm:'(prefers-reduced-motion:reduce)' }, ctx=>{
   const { wide, calm } = ctx.conditions;
   const fx = panels.map(p=>p.querySelectorAll('.fx'));
-  if(!wide || calm){ stage.classList.add('flat'); G.set(fx.flat(),{clearProps:'all'}); return ()=>stage.classList.remove('flat'); }
+  // Same scroll effects on every screen size; only Reduce Motion gets the flat, static layout.
+  if(calm){ stage.classList.add('flat'); G.set(fx.flat(),{clearProps:'all'}); return ()=>stage.classList.remove('flat'); }
   stage.classList.remove('flat');
   const cleanupProc = () => { $('#process').classList.remove('pinned'); G.set(cardsEl,{clearProps:'transform'}); goPhase = i => $('#pc'+i).scrollIntoView({block:'nearest'}); };
   const dist = () => Math.max(0, track.scrollWidth - innerWidth*M.stage.endAt);
