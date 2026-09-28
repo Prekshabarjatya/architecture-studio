@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Space-in Focus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Light-only, black and white to match the all-black logo. Same tokens as the other pages.
+   Proportions: golden ratio φ = 1.618 for shapes and splits; √φ = 1.272 per step for type. */
+:root{
+  --white:#FFFFFF; --paper:#F4F4F4; --grey:#E7E7E7; --ink:#0A0A0A; --muted:#5A5A5A; --stone:#8E8E8E; --pale:#E3E3E3;
+  --hair:rgba(10,10,10,.12);
+  --settle:cubic-bezier(.2,.7,.1,1); --door:cubic-bezier(.7,0,.2,1);
+  --sans:"Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif","Times New Roman",Georgia,serif;
+  --m:max(24px,3.9vw); --section:max(110px,calc(var(--m) * 2.618));
+  --fs-mega:max(96px,15.1vw); /* hero × 1.272⁴ */
+  --fs-hero:max(42px,5.93vw); --fs-xl:max(36px,4.66vw); --fs-l:max(30px,3.663vw); --fs-m:max(24px,2.264vw);
+  --fs-s:max(18px,1.4vw); --fs-body:max(16px,1.1vw); --fs-small:max(13px,.865vw); --fs-label:max(11.5px,.68vw);
+  --tr-xl:-.038em; --tr-l:-.032em; --tr-m:-.026em;
+  color-scheme:light;
+}
+@media (max-width:640px){:root{--m:16px;--section:72px;--fs-mega:21vw}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:var(--white);color:var(--ink);font:400 var(--fs-body)/1.6 var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+#scroller{height:100%;overflow-y:auto;overflow-x:hidden}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+h1,h2,h3,p{margin:0;font-weight:400}
+img{display:block;max-width:100%}
+.wrap{padding-inline:var(--m)}
+.label{font-size:var(--fs-label);line-height:1.3;color:var(--muted)}
+.ulink{background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .2s var(--settle);padding-bottom:2px}
+.ulink:hover,.ulink:focus-visible{background-size:100% 1px}
+.mark{display:inline-flex;align-items:center;gap:.28em;font-weight:600;letter-spacing:-.02em}
+.mark i{display:inline-block;width:1px;height:.9em;background:currentColor}
+.ph{position:relative;overflow:hidden;background:#2a2a2a}
+.ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--settle)}
+.slabel{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid var(--hair);padding-bottom:12px;margin-bottom:max(32px,2.8vw)}
+
+/* ---------- header with the sector switch ---------- */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:50;pointer-events:none;transition:background .4s,color .4s}
+.hdr .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-block:max(18px,1.6vw)}
+.hdr .wrap>*{pointer-events:auto}
+.hdr.light{background:rgba(255,255,255,.94)}
+.hdr.dark{color:#fff}
+.hdr a.side{font-size:var(--fs-small);justify-self:start;width:max-content}
+.pill{justify-self:center;background:var(--ink);color:#fff;border-radius:999px;padding:.6em 1.2em;font-size:max(15px,1.05vw)}
+.hdr.dark .pill{background:#fff;color:var(--ink)}
+/* Over the hero photo the Home link sits on a black pill so it reads on bright skies too. */
+.hdr a.side{padding:.4em .9em;border-radius:999px;transition:background .4s,color .4s}
+.hdr.dark a.side{background:var(--ink);color:#fff}
+.shift{justify-self:end;position:relative;display:flex;align-items:center;gap:12px;font-size:var(--fs-small)}
+.shift .cur{display:inline-flex;align-items:center;gap:.6em;border:1px solid currentColor;border-radius:999px;padding:.45em 1em}
+.shift .cur i{display:inline-block;width:.45em;height:.45em;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .3s}
+.shift.open .cur i{transform:rotate(-135deg)}
+.shift ul{position:absolute;right:0;top:calc(100% + 10px);list-style:none;margin:0;padding:8px;background:var(--ink);color:#fff;min-width:220px;display:grid;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .3s,transform .4s var(--settle)}
+.shift.open ul{opacity:1;transform:none;pointer-events:auto}
+.shift ul a{display:flex;justify-content:space-between;padding:.6em .8em;font-size:var(--fs-small)}
+.shift ul a:hover,.shift ul a[aria-current="true"]{background:#fff;color:var(--ink)}
+@media (max-width:560px){.shift .lbl{display:none}}
+
+/* ---------- hero: photo 61.8%, black block 38.2% ---------- */
+.hero{display:grid;grid-template-columns:61.8fr 38.2fr;height:100svh;min-height:600px}
+.hero .ph{height:100%}
+.hero .ph img{will-change:transform;transform:scale(1.08)}
+.hero .blk{background:var(--ink);color:#fff;display:grid;grid-template-rows:1fr auto;padding:calc(var(--m) + 64px) var(--m) var(--m)}
+.hero .num{font-size:var(--fs-mega);line-height:.8;letter-spacing:-.06em;font-weight:300;opacity:.18;font-variant-numeric:tabular-nums}
+.hero h1{font-size:var(--fs-hero);line-height:1;letter-spacing:var(--tr-xl);font-weight:500}
+.hero .tag{margin-top:1.2em;font-size:var(--fs-s);line-height:1.35;max-width:22ch;color:rgba(255,255,255,.72)}
+.hero .facts{display:flex;flex-wrap:wrap;gap:1em 2em;margin-top:2.6em;font-size:var(--fs-small);border-top:1px solid rgba(255,255,255,.2);padding-top:1em}
+.hero .facts b{display:block;white-space:nowrap;font-weight:400;font-size:var(--fs-l);letter-spacing:var(--tr-l);line-height:1}
+.hero .facts span{color:rgba(255,255,255,.6)}
+@media (max-width:900px){.hero{grid-template-columns:1fr;grid-template-rows:61.8svh auto;height:auto}.hero .blk{padding-top:var(--m)}}
+
+/* ---------- statement ---------- */
+.intro{padding-block:var(--section)}
+.cols{display:grid;grid-template-columns:repeat(12,1fr);column-gap:max(24px,3.4vw)}
+.cols .l{grid-column:1/span 7}
+.cols .r{grid-column:9/span 4;align-self:end;display:grid;gap:1.2em;color:var(--muted);max-width:62ch}
+.statement{font-size:var(--fs-xl);line-height:1.04;letter-spacing:var(--tr-xl)}
+.stone{color:var(--stone)}
+.hl{color:inherit;background:linear-gradient(var(--ink),var(--ink)) no-repeat 0 55%/0% 88%;padding:0 .06em;margin:0 -.03em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+html:not(.motion) .hl{background-size:100% 88%;color:#fff}
+@media (max-width:900px){.cols{grid-template-columns:1fr;row-gap:32px}.cols .l,.cols .r{grid-column:1/-1}}
+
+/* ---------- process: the big number stays pinned and rolls as the steps pass ---------- */
+.proc{padding-bottom:var(--section)}
+.pgrid{display:grid;grid-template-columns:38.2fr 61.8fr;column-gap:max(24px,3.4vw)}
+.pnum{position:sticky;top:18vh;align-self:start;height:max-content}
+.pnum .roll{height:calc(var(--fs-mega) * .82);overflow:hidden}
+.pnum .digits{display:block;font-size:var(--fs-mega);line-height:.82;letter-spacing:-.06em;font-weight:300;font-variant-numeric:tabular-nums;transition:transform .8s var(--settle)}
+.pnum .digits span{display:block;height:calc(var(--fs-mega) * .82)}
+.pnum .ptitle{margin-top:.8em;font-size:var(--fs-m);letter-spacing:var(--tr-m);line-height:1.1;min-height:2.3em}
+.pnum .bar{margin-top:1.4em;height:2px;background:var(--pale);position:relative}
+.pnum .bar i{position:absolute;inset:0 auto 0 0;width:20%;background:var(--ink);transition:width .8s var(--settle)}
+.steps{display:grid}
+.step{min-height:61.8svh;border-top:1px solid var(--hair);padding-block:max(28px,2.4vw);display:grid;grid-template-columns:1fr 1.618fr;gap:max(20px,2vw);align-content:start;opacity:.28;transition:opacity .6s var(--settle)}
+.step.on{opacity:1}
+.step h3{font-size:var(--fs-l);letter-spacing:var(--tr-l);line-height:1.05}
+.step .body{display:grid;gap:1.2em}
+.step .body p{max-width:52ch}
+.step dl{display:grid;grid-template-columns:auto 1fr;gap:.4em 1.6em;margin:0;font-size:var(--fs-small)}
+.step dt{color:var(--muted)}.step dd{margin:0}
+@media (max-width:900px){.pgrid{grid-template-columns:1fr}.pnum{position:relative;top:0;margin-bottom:24px}.step{grid-template-columns:1fr;min-height:0;opacity:1}}
+
+/* ---------- receive + principles ---------- */
+.rows{padding-bottom:var(--section)}
+.rrow{display:grid;grid-template-columns:.382fr 1fr 1.618fr;gap:max(20px,2vw);align-items:baseline;padding-block:max(22px,1.8vw);border-top:1px solid var(--hair)}
+.rrow:last-child{border-bottom:1px solid var(--hair)}
+.rrow .n{font-size:var(--fs-l);letter-spacing:var(--tr-l);font-weight:300;font-variant-numeric:tabular-nums;color:var(--stone);transition:color .4s}
+.rrow h3{font-size:var(--fs-m);letter-spacing:var(--tr-m);line-height:1.1}
+.rrow p{color:var(--muted);max-width:56ch}
+.rrow:hover .n{color:var(--ink)}
+@media (max-width:760px){.rrow{grid-template-columns:auto 1fr}.rrow p{grid-column:2}}
+
+/* ---------- highlighted projects ---------- */
+.hp{padding-bottom:var(--section)}
+.hp .head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:max(28px,2.4vw)}
+.hp h2{font-size:var(--fs-xl);letter-spacing:var(--tr-xl);line-height:1}
+.hgrid{display:grid;gap:max(14px,1vw)}
+.hgrid .pc{display:grid;gap:10px;align-content:start}
+/* Layout by count, all from the φ family: 3 = tall 4:5 beside two squares; 2 = two 4:5; 1 = one φ:1. */
+.hgrid.n3{grid-template-columns:1.618fr 1fr}
+.hgrid.n3 .pc:first-child{grid-row:span 2}
+.hgrid.n3 .pc:first-child .ph{aspect-ratio:4/5}
+.hgrid.n3 .pc:not(:first-child) .ph{aspect-ratio:1/1}
+.hgrid.n2{grid-template-columns:1fr 1fr}.hgrid.n2 .ph{aspect-ratio:4/5}
+.hgrid.n1{grid-template-columns:1fr}.hgrid.n1 .ph{aspect-ratio:1.618/1}
+.pc:hover .ph img{transform:scale(1.04)}
+.pc .meta{display:flex;justify-content:space-between;font-size:var(--fs-small)}
+.pc .meta span{color:var(--muted)}
+.hp .empty{color:var(--muted)}
+@media (max-width:760px){.hgrid,.hgrid.n3,.hgrid.n2{grid-template-columns:1fr}.hgrid.n3 .pc:first-child{grid-row:auto}}
+
+/* ---------- next focus ---------- */
+.next{display:block;background:var(--ink);color:#fff;padding:var(--section) var(--m)}
+.next .label{color:rgba(255,255,255,.6)}
+.next .t{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:0 24px;font-size:var(--fs-mega);letter-spacing:-.055em;line-height:.9;font-weight:500}
+.next .t i{font-style:normal;font-weight:300;transition:transform .6s var(--settle)}
+.next:hover .t i{transform:translateX(.12em)}
+.foot{background:var(--ink);color:rgba(255,255,255,.7);border-top:1px solid rgba(255,255,255,.14);display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;padding:max(22px,1.8vw) var(--m);font-size:var(--fs-small)}
+
+/* ---------- wipe between sectors ---------- */
+.wipe{position:fixed;inset:0;z-index:90;background:var(--ink);visibility:hidden;pointer-events:none}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.2s!important}}
+</style>
+</head>
+<body>
+
+<header class="hdr dark" id="hdr">
+  <div class="wrap">
+    <a class="side ulink" href="index.html">← Home</a>
+    <a class="pill mark" href="index.html" aria-label="Space-in home">Space<i></i>in</a>
+    <div class="shift" id="shift">
+      <span class="lbl">Shift your focus</span>
+      <button class="cur" id="shiftBtn" aria-expanded="false" aria-controls="shiftList"><span id="curName">Residential</span><i aria-hidden="true"></i></button>
+      <ul id="shiftList"></ul>
+    </div>
+  </div>
+</header>
+
+<div id="scroller"><div id="content">
+  <section class="hero" id="hero">
+    <div class="ph"><img id="heroImg" src="photos/focus-residential.jpg" alt=""></div>
+    <div class="blk">
+      <span class="num" id="heroNum">01</span>
+      <div>
+        <h1 id="heroTitle">Residential</h1>
+        <p class="tag" id="heroTag"></p>
+        <div class="facts" id="heroFacts"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="intro wrap">
+    <div class="slabel label"><span id="introLabel">Residential</span><span>(01)</span></div>
+    <div class="cols">
+      <h2 class="statement l" id="statement"></h2>
+      <div class="r" id="introBody"></div>
+    </div>
+  </section>
+
+  <section class="proc wrap">
+    <div class="slabel label"><span>How we work on <span id="procName">residential</span> projects</span><span>(02)</span></div>
+    <div class="pgrid">
+      <div class="pnum" aria-hidden="true">
+        <div class="roll"><span class="digits" id="digits"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span></span></div>
+        <p class="ptitle" id="ptitle"></p>
+        <div class="bar"><i id="pbar"></i></div>
+      </div>
+      <div class="steps" id="steps"></div>
+    </div>
+  </section>
+
+  <section class="rows wrap">
+    <div class="slabel label"><span>What you receive</span><span>(03)</span></div>
+    <div id="receive"></div>
+  </section>
+
+  <section class="rows wrap">
+    <div class="slabel label"><span>Why clients choose Space-in</span><span>(04)</span></div>
+    <div id="why"></div>
+  </section>
+
+  <section class="hp wrap">
+    <div class="slabel label"><span>Highlighted projects</span><span>(05)</span></div>
+    <div class="head"><h2 id="hpTitle">Residential work</h2><a class="ulink" id="hpAll" href="projects.html">All projects →</a></div>
+    <div class="hgrid" id="hgrid"></div>
+  </section>
+
+  <a class="next" id="next" href="#interiors">
+    <p class="label">Next focus</p>
+    <p class="t"><span id="nextName">Interiors</span><i aria-hidden="true">→</i></p>
+  </a>
+  <div class="foot"><span>Space-in® 2026 · Architecture + Interiors · Indore, Madhya Pradesh</span><a class="ulink" href="index.html#talk">Let's talk</a></div>
+</div></div>
+<div class="wipe" id="wipe" aria-hidden="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+
+/* ---- one entry per sector; the page renders whichever the address names (#residential etc.) ---- */
+const S = [
+ { k:'residential', n:'Residential', ph:'focus-residential', tag:'Homes that grow with the families in them.',
+   facts:[['3','Projects'],['2021','Since'],['1,082 m²','Designed']],
+   st:['Every house starts with ','how a family lives.',' We draw the rooms around ','the day inside them.'],
+   body:['From courtyard homes in Indore to riverside villas in Maheshwar, we plan each house around light, air and the way three generations share a roof.','Every drawing is made in the studio and every detail is checked on site, so the house that is built is the house that was drawn.'],
+   steps:[['Listen + read the site','We spend a morning and an evening on the plot and a long conversation with the family.','A site study and a written brief','2 to 3 weeks'],
+          ['Sketch + concept','Two or three plans, tested with hand sketches and a card model of the massing.','Concept plans and a model','4 to 6 weeks'],
+          ['Design + detail','Rooms, joinery and materials fixed down to the door handles and the stone for the court.','Drawings at 1:50 and 1:20, a materials board','8 to 12 weeks'],
+          ['Approvals + drawings','We prepare the municipal set and the drawings your contractor prices and builds from.','Permit set, tender drawings, costing','6 to 10 weeks'],
+          ['Site + handover','We are on site every week until the last coat of plaster, then hand over the keys.','Site reports, a snag list, as-built drawings','Length of build']] },
+ { k:'interiors', n:'Interiors', ph:'focus-interiors', tag:'Rooms made from plaster, timber and stone.',
+   facts:[['2','Projects'],['2024','Since'],['330 m²','Designed']],
+   st:['An interior is ','the part you touch.',' We choose every surface for ','how it ages.'],
+   body:['We work inside existing shells and new builds alike: apartments in Bhopal, family homes in Indore, rooms that need to feel calm at the end of a long day.','Lime plaster, oiled teak and local stone are chosen for how they wear over twenty years, not how they photograph on the first day.'],
+   steps:[['Listen + measure','A full measured survey and a conversation about how each room is used.','Measured drawings and a brief','1 to 2 weeks'],
+          ['Mood + layout','Furniture layouts, a material palette and hand-drawn views of the key rooms.','Layouts, palette, sketches','3 to 4 weeks'],
+          ['Detail + joinery','Every cabinet, shelf and light drawn and specified for the maker.','Joinery drawings, lighting plan','6 to 8 weeks'],
+          ['Sourcing + costing','Samples approved in the studio, makers chosen and every item costed.','Schedule of finishes, costed list','3 to 4 weeks'],
+          ['Build + styling','We manage the makers on site and place the last lamp before you move in.','Site reports, styled handover','Length of fit-out']] },
+ { k:'workplace', n:'Workplace', ph:'focus-workplace', tag:'Offices people choose to come back to.',
+   facts:[['1','Project'],['2026','Since'],['2,400 m²','Designed']],
+   st:['A good office ','earns the commute.',' We plan around ','how teams actually work.'],
+   body:['We study how a team spends its day before drawing a single desk: where people meet, where they need quiet, where they eat together.','Even north light, shaded terraces and rooms of the right size make a workplace people choose over working from home.'],
+   steps:[['Study the team','Workshops and a week of observation to map how the team works now.','A space brief and headcount plan','2 to 3 weeks'],
+          ['Plan + test','Floor plans tested against the brief, with a walk-through model.','Test fits and a 3D walk-through','4 to 6 weeks'],
+          ['Design + detail','Rooms, acoustics, services and furniture designed and coordinated.','Coordinated drawings, specifications','8 to 10 weeks'],
+          ['Approvals + tender','Landlord and municipal approvals, and a tender to three contractors.','Approved set, tender report','4 to 8 weeks'],
+          ['Build + move in','Weekly site visits and a move plan so the team loses no working days.','Site reports, move plan, as-built set','Length of build']] },
+ { k:'hospitality', n:'Hospitality', ph:'focus-hospitality', tag:'Places to eat, stay and gather.',
+   facts:[['2','Projects'],['2019','Since'],['370 m²','Designed']],
+   st:['A café is judged in ','the first ten seconds.',' We design for ','the table, the light and the queue.'],
+   body:['Cafés, dining rooms and small stays in Indore where the plan has to work for the kitchen as hard as it works for the guest.','We design the room at the scale of one table and one chair, then make sure the whole service still runs on a busy Sunday.'],
+   steps:[['Brief + service','We map the menu, the kitchen flow and the busiest hour of the week.','Service brief and kitchen flow','1 to 2 weeks'],
+          ['Concept + atmosphere','Plan, seating, lighting mood and a material story for the brand.','Concept pack and seating plan','3 to 4 weeks'],
+          ['Design + detail','Counters, seating and lighting drawn for makers and the kitchen fitter.','Detailed drawings, lighting design','6 to 8 weeks'],
+          ['Licences + costing','Drawings for licences and fire approval, and a costed build.','Licence set, costed build','3 to 6 weeks'],
+          ['Build + opening','On site until the soft launch, then a review after the first month.','Site reports, opening snag list','Length of fit-out']] },
+ { k:'institutional', n:'Institutional', ph:'focus-institutional', tag:'Schools and libraries built for the long term.',
+   facts:[['2','Projects'],['2024','Since'],['2,810 m²','Designed']],
+   st:['Public buildings ','do not get do-overs.',' We design them to last ','fifty years of daily use.'],
+   body:['Libraries, schools and pavilions in Ujjain and Dewas, designed with the people who will use them every day and the trustees who will maintain them.','Passive cooling, durable materials and plans that can change use keep running costs low for decades.'],
+   steps:[['Engage + brief','Meetings with users, staff and trustees to agree what the building must do.','Stakeholder brief and site study','3 to 4 weeks'],
+          ['Concept + budget','Options tested against the budget and the climate, with a cooling strategy.','Concept options and cost plan','6 to 8 weeks'],
+          ['Design + detail','Structure, services and every public room drawn and coordinated.','Coordinated set, specifications','10 to 14 weeks'],
+          ['Approvals + tender','Statutory approvals and a transparent public tender.','Approved set, tender report','8 to 12 weeks'],
+          ['Build + handover','Monthly reports to trustees and a maintenance manual at handover.','Site reports, O&M manual','Length of build']] },
+];
+const receive = [['Drawings','Plans, sections and details at 1:100, 1:50 and 1:20, drawn in the studio.'],['Models','Card and 3D models at each stage so you see the building before it is built.'],['Costs','A cost plan at concept and a costed tender before anything is built.'],['Site','Weekly site visits and written reports until handover.']];
+const why = [['One team','The people who draw your building are the people on site. Nothing is handed to a stranger.'],['Honest numbers','We show where the money goes and what each choice costs, before you commit to it.'],['Built for the climate','Deep shade, cross-ventilation and thick walls do the work before any machine does.'],['Local makers','Stone, lime and timber from Madhya Pradesh, worked by craftspeople we know by name.']];
+const projects = [
+  {n:'Courtyard House', city:'Indore', s:'residential', ph:'courtyard-house'},{n:'Brick Villa', city:'Maheshwar', s:'residential', ph:'brick-villa'},
+  {n:'Terrace Residence', city:'Bhopal', s:'residential', ph:'terrace-residence'},{n:'Lime Plaster Apartment', city:'Bhopal', s:'interiors', ph:'lime-plaster-apartment'},
+  {n:'Vijay Nagar Apartment', city:'Indore', s:'interiors', ph:'room-living'},{n:'Palasia Studio Offices', city:'Indore', s:'workplace', ph:'palasia-studio-offices'},
+  {n:'Kund Café', city:'Indore', s:'hospitality', ph:'kund-cafe'},{n:'Rajwada Dining Room', city:'Indore', s:'hospitality', ph:'room-dining'},
+  {n:'Stepwell Library', city:'Ujjain', s:'institutional', ph:'stepwell-library'},{n:'School Pavilion', city:'Dewas', s:'institutional', ph:'school-pavilion'},
+];
+
+$('#shiftList').innerHTML = S.map((s,i)=>`<li><a href="#${s.k}" data-k="${s.k}"><span>${s.n}</span><span>(0${i+1})</span></a></li>`).join('');
+$('#receive').innerHTML = receive.map((r,i)=>`<div class="rrow"><span class="n">0${i+1}</span><h3>${r[0]}</h3><p>${r[1]}</p></div>`).join('');
+$('#why').innerHTML = why.map((r,i)=>`<div class="rrow"><span class="n">0${i+1}</span><h3>${r[0]}</h3><p>${r[1]}</p></div>`).join('');
+
+let cur = -1, afterRender = ()=>{};
+function render(k){
+  const i = Math.max(0, S.findIndex(s=>s.k===k)); cur=i; const s=S[i], nx=S[(i+1)%S.length];
+  document.title = s.n + ' · Space-in Focus';
+  $('#curName').textContent=s.n;
+  document.querySelectorAll('#shiftList a').forEach(a=>a.setAttribute('aria-current', a.dataset.k===s.k));
+  $('#heroImg').src=`photos/${s.ph}.jpg`; $('#heroImg').alt=`${s.n} work by Space-in`;
+  $('#heroNum').textContent='0'+(i+1); $('#heroTitle').textContent=s.n; $('#heroTag').textContent=s.tag;
+  $('#heroFacts').innerHTML=s.facts.map(f=>`<div><b>${f[0]}</b><span>${f[1]}</span></div>`).join('');
+  $('#introLabel').textContent=s.n; $('#procName').textContent=s.n.toLowerCase();
+  $('#statement').innerHTML=`${s.st[0]}<mark class="hl">${s.st[1]}</mark> <span class="stone">${s.st[2]}<mark class="hl">${s.st[3]}</mark></span>`;
+  $('#introBody').innerHTML=s.body.map(p=>`<p>${p}</p>`).join('');
+  $('#steps').innerHTML=s.steps.map((p,j)=>`<article class="step${j===0?' on':''}" data-i="${j}"><h3>${p[0]}</h3><div class="body"><p>${p[1]}</p><dl><dt>You receive</dt><dd>${p[2]}</dd><dt>Takes about</dt><dd>${p[3]}</dd></dl></div></article>`).join('');
+  setStep(0);
+  const mine=projects.filter(p=>p.s===s.k);
+  $('#hpTitle').textContent=`${s.n} work`; $('#hpAll').href=`projects.html#${s.k}`;
+  $('#hgrid').className='hgrid n'+Math.min(3,mine.length);
+  $('#hgrid').innerHTML = mine.length ? mine.map(p=>`<a class="pc" href="projects.html#${s.k}"><div class="ph"><img src="photos/${p.ph}.jpg" alt="${p.n}, ${p.city}"></div><div class="meta">${p.n}<span>${p.city}</span></div></a>`).join('') : '<p class="empty">Projects in this sector are being photographed.</p>';
+  $('#nextName').textContent=nx.n; $('#next').href='#'+nx.k;
+  afterRender();
+}
+function setStep(j){
+  const s=S[cur]; if(!s) return;
+  $('#digits').style.transform=`translateY(${-j*100/5}%)`;
+  $('#ptitle').textContent=s.steps[j][0];
+  $('#pbar').style.width=((j+1)*20)+'%';
+  document.querySelectorAll('.step').forEach(el=>el.classList.toggle('on', +el.dataset.i===j));
+}
+
+/* sector switch */
+const shift=$('#shift');
+$('#shiftBtn').onclick=()=>{ const o=!shift.classList.contains('open'); shift.classList.toggle('open',o); $('#shiftBtn').setAttribute('aria-expanded',o); };
+document.addEventListener('click',e=>{ if(!e.target.closest('#shift')){ shift.classList.remove('open'); $('#shiftBtn').setAttribute('aria-expanded',false); } });
+let go = k => { location.hash=k; };
+addEventListener('hashchange',()=>go(location.hash.slice(1), true));
+document.addEventListener('click',e=>{ const a=e.target.closest('a[href^="#"]'); if(!a) return; const k=a.getAttribute('href').slice(1); if(!S.some(s=>s.k===k)) return;
+  e.preventDefault(); shift.classList.remove('open'); if(k!==S[cur].k) go(k); });
+
+render(location.hash.slice(1));
+
+/* =====================================================================
+   Motion: Lenis + GSAP ScrollTrigger, same engine and timings as the other pages.
+   ===================================================================== */
+const G=window.gsap, ST=window.ScrollTrigger, scroller=$('#scroller'), hdr=$('#hdr');
+const calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const plainGo = k => { history.replaceState(null,'','#'+k); render(k); scroller.scrollTop=0; };
+if(!G || !ST || !window.Lenis || calm){
+  go = plainGo;
+  scroller.addEventListener('scroll',()=>{ hdr.className='hdr '+(scroller.scrollTop < innerHeight*.9 ? 'dark':'light'); const steps=[...document.querySelectorAll('.step')]; steps.forEach((el,j)=>{ const r=el.getBoundingClientRect(); if(r.top<innerHeight*.5 && r.bottom>innerHeight*.5) setStep(j); }); },{passive:true});
+  return;
+}
+G.registerPlugin(ST); ST.defaults({ scroller });
+if(window.CustomEase){ G.registerPlugin(CustomEase); CustomEase.create('settle','.2,.7,.1,1'); CustomEase.create('door','.7,0,.2,1'); }
+const EASE={ settle: window.CustomEase?'settle':'power3.out', door: window.CustomEase?'door':'power3.inOut' };
+document.documentElement.classList.add('motion');
+const lenis = new Lenis({ wrapper:scroller, content:$('#content'), lerp:0.09, smoothWheel:true, wheelMultiplier:0.9 });
+lenis.on('scroll', ST.update);
+G.ticker.add(t=>lenis.raf(t*1000)); G.ticker.lagSmoothing(0);
+
+let ctx;
+function build(){
+  if(ctx) ctx.revert();
+  ctx = G.context(()=>{
+    /* header: white over the page, light type over the hero */
+    ST.create({ trigger:'#hero', start:'top top', end:'bottom 64px', onToggle:self=>{ hdr.className='hdr '+(self.isActive?'dark':'light'); } });
+    /* hero photo settles and drifts; the title block rises in */
+    G.fromTo('#heroImg',{ scale:1.12 },{ scale:1, duration:1.6, ease:EASE.settle });
+    G.to('#heroImg',{ yPercent:12, ease:'none', scrollTrigger:{ trigger:'#hero', start:'top top', end:'bottom top', scrub:true } });
+    G.from('.hero .num, .hero h1, .hero .tag, .hero .facts > *',{ opacity:0, y:24, filter:'blur(8px)', duration:1, stagger:0.08, ease:EASE.settle, delay:0.15 });
+    /* statement: words fill in, marker bars sweep across */
+    const st=$('#statement'); const words=[];
+    const walk=n=>[...n.childNodes].forEach(c=>{ if(c.nodeType===3){ const f=document.createDocumentFragment(); c.textContent.split(/(\s+)/).forEach(w=>{ if(!w) return; if(/^\s+$/.test(w)) f.append(w); else { const sp=document.createElement('span'); sp.className='w'; sp.textContent=w; f.append(sp); words.push(sp); } }); c.replaceWith(f); } else if(c.nodeType===1) walk(c); });
+    walk(st);
+    const plain=words.filter(w=>!w.closest('.hl')), finalC=plain.map(w=>getComputedStyle(w).color);
+    G.set(words,{ color:'#e3e3e3' });
+    G.to(plain,{ color:i=>finalC[i], ease:'none', stagger:0.1, scrollTrigger:{ trigger:st, start:'top 90%', end:'bottom 30%', scrub:1.2 } });
+    st.querySelectorAll('.hl').forEach(m=>G.timeline({ scrollTrigger:{ trigger:m, start:'top 82%', end:'top 28%', scrub:1.4 } })
+      .to(m,{ backgroundSize:'100% 88%', ease:'none' },0).to(m.querySelectorAll('.w'),{ color:'#fff', ease:'none', stagger:0.15 },0));
+    /* process: the step crossing the middle of the screen sets the pinned number */
+    document.querySelectorAll('.step').forEach((el,j)=>ST.create({ trigger:el, start:'top 55%', end:'bottom 55%', onToggle:self=>{ if(self.isActive) setStep(j); } }));
+    /* text and rows blur into focus */
+    ST.batch('.intro .r p, .rrow, .hp .head, .slabel',{ start:'top 92%', once:true, onEnter:b=>G.fromTo(b,{ opacity:0, y:16, filter:'blur(8px)' },{ opacity:1, y:0, filter:'blur(0px)', duration:1, stagger:0.09, ease:EASE.settle }) });
+    /* photos unmask upward */
+    document.querySelectorAll('.hgrid .ph').forEach(ph=>{ const img=ph.querySelector('img');
+      G.set(ph,{ clipPath:'inset(100% 0% 0% 0%)' }); G.set(img,{ scale:1.12 });
+      ST.create({ trigger:ph, start:'top 90%', once:true, onEnter:()=>{ G.to(ph,{ clipPath:'inset(0% 0% 0% 0%)', duration:1.2, ease:EASE.settle }); G.to(img,{ scale:1, duration:1.6, ease:EASE.settle }); } });
+    });
+    /* next focus: the big name slides in */
+    G.from('.next .t',{ xPercent:-8, opacity:0, ease:'none', scrollTrigger:{ trigger:'.next', start:'top bottom', end:'top 40%', scrub:1 } });
+  }, $('#content'));
+  ST.refresh();
+  headerState();
+}
+// The header style follows the scroll position directly (also works where touch scrolling bypasses the smooth scroller).
+function headerState(){ hdr.className = 'hdr ' + (scroller.scrollTop < $('#hero').offsetHeight - 64 ? 'dark' : 'light'); }
+scroller.addEventListener('scroll', headerState, { passive:true });
+afterRender = () => {}; build();
+
+/* switching sector: a black wipe rises, the page changes behind it, the wipe leaves upward */
+const wipe=$('#wipe');
+// Positioned only by GSAP (yPercent); a CSS transform here would be read as pixels and stack with it.
+G.set(wipe,{ y:0, yPercent:100, visibility:'visible' });
+go = (k, fromHash) => {
+  if(!S.some(s=>s.k===k) || k===S[cur].k) return;
+  if(!fromHash) history.pushState(null,'','#'+k);
+  G.timeline()
+    .set(wipe,{ yPercent:100 })
+    .to(wipe,{ yPercent:0, duration:0.7, ease:EASE.door })
+    .add(()=>{ render(k); lenis.scrollTo(0,{ immediate:true }); build(); })
+    .to(wipe,{ yPercent:-100, duration:0.8, ease:EASE.door },'+=0.1');
+};
+addEventListener('load',()=>ST.refresh());
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1002 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<meta charset="utf-8">
+<title>Space-in Homepage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Light-only, black and white by design. Colours are set explicitly. */
+:root{
+  /* Black and white, to match the all-black logo. Photography is the only colour on the page. */
+  --plaster:#FFFFFF; --paper:#F4F4F4; --ink:#0A0A0A; --muted:#5A5A5A; --stone:#8E8E8E;
+  --hair:rgba(10,10,10,.12); --olive:#0A0A0A; --charcoal:#111111;
+  --umber:#0A0A0A; --terracotta:#1C1C1C; --dusk:#E6E6E6; --sage:#2E2E2E; --blush:#F4F4F4;
+  --settle:cubic-bezier(.2,.7,.1,1); --door:cubic-bezier(.7,0,.2,1);
+  --m:max(24px,3.9vw); --gap:max(14px,1vw); --section:max(110px,calc(var(--m) * 2.618)); /* section gap = side margin × φ² */
+  --sans:"Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
+  /* One type scale. Display sizes stay regular weight with tight tracking: that is what reads premium. */
+  /* Sizes follow the window width with no ceiling, so the page keeps the same proportions on a laptop or a 2560px screen. */
+  /* Type scale: one ratio, √φ = 1.272, from a 1.1vw body. Each step is the one below × 1.272.
+     label .68 · small .865 · body 1.1 · s 1.4 · m 2.264 (s×1.272²) · l 3.663 · xl 4.66 · hero 5.93 */
+  --fs-hero:max(42px,5.93vw); --fs-xl:max(36px,4.66vw); --fs-l:max(30px,3.663vw);
+  --fs-m:max(24px,2.264vw); --fs-s:max(18px,1.4vw); --fs-body:max(16px,1.1vw); --fs-small:max(13px,.865vw); --fs-label:max(11.5px,.68vw);
+  --tr-xl:-.038em; --tr-l:-.032em; --tr-m:-.026em; --tr-s:-.015em;
+  --serif:"Instrument Serif","Times New Roman",Georgia,serif;
+  color-scheme:light;
+}
+@media (max-width:640px){:root{--m:16px;--section:72px}}
+*{box-sizing:border-box}
+/* Lenis moves the page itself, so native smooth scrolling must stay off. */
+html.lenis,html.lenis body{height:auto}
+/* The page scrolls inside its own full-screen area, so motion works however a host sizes the frame. */
+html.own,html.own body{height:100%;overflow:hidden}
+html.own #scroller{height:100%;overflow-y:auto;overflow-x:hidden}
+
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
+body{margin:0;background:var(--plaster);color:var(--ink);font:400 var(--fs-body)/1.6 var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-kerning:normal;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.dark :focus-visible,.menu :focus-visible{outline-color:var(--plaster)}
+.wrap{margin-inline:auto;padding-inline:var(--m)}
+.label{font-size:var(--fs-label);line-height:1.3;letter-spacing:.01em;color:var(--muted)}
+.chip{display:inline-block;font-variant-numeric:tabular-nums}
+.stone{color:var(--stone)}
+h1,h2,h3{font-weight:400;margin:0;text-wrap:balance}
+p{margin:0}
+.statement{font-size:var(--fs-l);line-height:1.02;letter-spacing:var(--tr-l);font-weight:400}
+.statement.big{font-size:var(--fs-xl);line-height:1.04;letter-spacing:var(--tr-xl)}
+/* Marker highlight: a black bar sweeps in behind key phrases as they scroll into view. */
+.hl-static .hl,html:not(.motion) .hl{background-size:100% 88%!important;color:#fff!important}
+.hl{color:inherit;background:linear-gradient(var(--ink),var(--ink)) no-repeat 0 55%/0% 88%;padding:0 .06em;margin:0 -.03em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.title{font-size:var(--fs-m);line-height:1.08;letter-spacing:var(--tr-m)}
+.serif{font-family:var(--serif);font-weight:400;font-size:clamp(22px,2.2vw,32px);line-height:1.1}
+.ulink{background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .2s var(--settle);padding-bottom:2px}
+.ulink:hover,.ulink:focus-visible{background-size:100% 1px}
+@media (hover:none){.ulink{background-size:100% 1px}}
+.section-label{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid var(--hair);padding-bottom:12px;margin-bottom:40px}
+section{scroll-margin-top:80px}
+
+/* ---------- placeholder photography ---------- */
+.ph{position:relative;overflow:hidden;background:var(--tone,#8a7f70)}
+.ph .img{position:absolute;inset:0;transition:transform 1.2s var(--settle)}
+.ph .img img{width:100%;height:100%;object-fit:cover;display:block}
+.ph svg.room{position:absolute;inset:0;width:100%;height:100%}
+.ph-tag{position:absolute;left:12px;bottom:10px;font-size:var(--fs-label);color:rgba(255,255,255,.8);z-index:1}
+
+/* ---------- loader: S P A C E grows into words, then "in" (after LPAS) ---------- */
+.loader{position:fixed;inset:0;z-index:100;background:var(--charcoal);color:var(--plaster);display:grid;place-items:center}
+.loader.done{display:none}
+.lw{display:grid;gap:2px;font-size:var(--fs-m);line-height:1.08;letter-spacing:var(--tr-m);font-weight:400}
+.lw .row{display:flex}
+.lw .rest{display:inline-block;max-width:0;overflow:hidden;white-space:nowrap;vertical-align:bottom}
+.lw .in{margin-top:14px;display:flex;align-items:center;gap:12px}
+.lw .in i{display:block;width:0;height:1px;background:#FFFFFF}
+.hero .content{will-change:transform}
+
+/* ---------- header ---------- */
+.hdr{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;pointer-events:none;background:rgba(255,255,255,.94);transition:background .4s ease}
+/* Over dark photography the header is see-through; over white pages it gets a white band so text never runs under it. */
+.hdr.on-dark{background:transparent}
+.hdr .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-block:18px}
+.hdr > .wrap > *{pointer-events:auto}
+.hdr .clock,.hdr .talk{transition:color .4s ease}
+.hdr.on-dark .clock,.hdr.on-dark .talk{color:var(--plaster)}
+.clock{font-size:var(--fs-small);font-variant-numeric:tabular-nums}
+.pill{justify-self:center;display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border-radius:999px;padding:.6em 1.07em .6em 1.2em;font-weight:600;letter-spacing:-.02em;font-size:max(15px,1.05vw)}
+.pill .bar{display:inline-block;width:1px;height:14px;background:currentColor;margin-inline:3px;vertical-align:-2px}
+.pill .mn{font-weight:400;font-size:var(--fs-label);color:rgba(255,255,255,.62);border-left:1px solid rgba(255,255,255,.22);padding-left:10px}
+.talk{justify-self:end;display:flex;align-items:center;gap:10px;font-size:max(14px,1vw)}
+.arrowc{display:inline-grid;place-items:center;width:max(30px,2.1vw);height:max(30px,2.1vw);border-radius:50%;border:1px solid currentColor;transition:transform .2s var(--settle),background .2s,color .2s}
+.talk:hover .arrowc{transform:translateX(4px)}
+@media (max-width:400px){.clock{visibility:hidden}.talk .t{display:none}}
+
+/* ---------- menu ---------- */
+.menu{position:fixed;inset:0;z-index:60;background:var(--olive);color:var(--plaster);clip-path:inset(0 0 100% 0);transition:clip-path .7s var(--door);visibility:hidden}
+.menu.open{clip-path:inset(0 0 0 0);visibility:visible}
+.menu .wrap{padding-block:18px;height:100%;display:flex;flex-direction:column}
+.menu .top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
+.menu .pill{background:#fff;color:var(--ink)}
+.menu .pill .mn{color:var(--muted);border-left-color:var(--hair)}
+.hdr.on-dark .pill{background:#fff;color:var(--ink)}
+.hdr.on-dark .pill .mn{color:var(--muted);border-left-color:var(--hair)}
+.menu nav{margin-top:auto;display:grid;gap:6px}
+.menu nav a{font-size:var(--fs-xl);letter-spacing:var(--tr-xl);line-height:1.02;opacity:0;transform:translateY(20px);transition:opacity .5s var(--settle),transform .7s var(--settle);display:flex;gap:16px;align-items:baseline}
+.menu nav a small{font-size:var(--fs-label);letter-spacing:0;opacity:.6}
+.menu.open nav a{opacity:1;transform:none}
+.menu .meta{display:flex;flex-wrap:wrap;gap:32px;justify-content:space-between;padding-top:40px;margin-top:40px;border-top:1px solid rgba(255,255,255,.18);font-size:var(--fs-small);opacity:.8}
+
+/* ---------- stage: hero + focus panels slide in sideways (after LPAS) ---------- */
+.stage{position:relative;background:var(--plaster)}
+.pin{position:relative;height:100svh;overflow:hidden}
+.track{position:absolute;inset:0;display:flex;height:100%;padding-left:calc(100vw - 72px);will-change:transform;z-index:2}
+.veil{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+.hero{position:absolute;inset:0;color:var(--plaster);overflow:hidden;background:var(--charcoal)}
+.hero .shots{position:absolute;inset:0}
+.hero .shot{position:absolute;inset:0;opacity:0;transition:opacity 1.6s ease}
+.hero .shot.on{opacity:1}
+.hero .shot .img{transform:scale(1.1);transition:transform 7s linear}
+.hero .shot.on .img{transform:scale(1)}
+.hero .shots::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.4);pointer-events:none}
+.hero .content{position:absolute;inset:auto 0 0 0}
+.hero h1{font-size:var(--fs-hero);line-height:1;letter-spacing:var(--tr-xl);max-width:14ch;font-weight:400;color:rgba(255,255,255,.38);transition:color 1.6s ease .3s}
+.hero.in h1{color:var(--plaster)}
+.hero h1 .second{display:block;color:inherit;opacity:.72}
+.hero .meta{display:flex;flex-wrap:wrap;gap:8px 32px;justify-content:space-between;padding-block:14px 26px;font-size:var(--fs-label);color:rgba(255,255,255,.85)}
+.hero .meta.top{position:absolute;left:0;right:0;top:44%;border:0}
+/* In a short window the middle row would run into the headline, so it steps aside. */
+@media (max-height:760px){.hero .meta.top{display:none}}
+.hero .meta .dot{display:inline-grid;place-items:center;width:18px;height:18px;border:1px solid currentColor;border-radius:50%;margin-left:8px;font-size:10px}
+.stage .panel{flex:0 0 max(340px,44vw);display:flex;flex-direction:column;color:var(--plaster);position:relative}
+.stage .panel .ph{flex:1}
+.stage .panel.blush,.stage .panel.dusk{color:var(--ink)}
+.stage .panel.blush .blk{box-shadow:inset 1px 0 0 var(--hair)}
+/* Sector panel: photo 61.8%, colour block 38.2% (φ split). */
+.stage .panel .blk{background:var(--c);padding:22px 22px 26px;display:grid;grid-template-columns:1fr auto;gap:10px;height:38.2%;align-content:end}
+.stage .panel .subs{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:max(12px,.85vw);opacity:0;transform:translateY(10px);transition:opacity .5s var(--settle),transform .8s var(--settle);align-self:start}
+.stage .panel .subs span{border-bottom:1px solid currentColor;padding-bottom:3px;opacity:.85}
+.stage .panel .plus{position:absolute;right:22px;top:calc(61.8% + 22px);width:26px;height:26px;border:1px solid currentColor;border-radius:50%;display:grid;place-items:center;font-size:15px;transition:transform .6s var(--settle)}
+.stage .panel h3{font-size:var(--fs-m);letter-spacing:var(--tr-m);line-height:1.05;align-self:end}
+.stage .panel .side{font-size:var(--fs-label);text-align:right;align-self:end;opacity:.85;max-width:12ch}
+.stage .panel .count{grid-column:1/-1;font-size:11px;opacity:.7;font-variant-numeric:tabular-nums}
+.stage .panel:hover .subs,.stage .panel:focus-visible .subs{opacity:1;transform:none}
+.stage .panel:hover .plus{transform:rotate(90deg)}
+.stage .panel:hover .img{transform:scale(1.04)}
+.stage.flat .pin{position:static;height:auto}
+.stage.flat .track{position:static;padding-left:0;flex-direction:column;transform:none!important}
+.stage.flat .veil{display:none}
+.stage.flat .hero{position:relative;height:88svh;min-height:520px;opacity:1!important}
+.stage.flat .panel{flex:none;width:100%}
+.stage.flat .panel .ph{flex:none;height:240px}
+.stage.flat .panel .blk{height:auto}
+.stage.flat .panel .plus{top:262px}
+.stage.flat .panel .subs{opacity:1;transform:none}
+
+
+/* ---------- intro ---------- */
+.intro{padding-block:var(--section)}
+.cols{display:grid;grid-template-columns:repeat(12,1fr);column-gap:48px}
+.cols .l5{grid-column:1/span 6}
+.cols .r4{grid-column:8/span 5;align-self:end;display:grid;gap:24px}
+@media (max-width:900px){.cols{grid-template-columns:1fr;row-gap:32px}.cols .l5,.cols .r4{grid-column:auto}}
+.intro .r4 p{max-width:62ch;color:var(--muted)}
+
+
+/* ---------- selected work ---------- */
+.work{padding-top:var(--section)}
+.work-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:24px;margin-bottom:28px}
+.filters{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.filters button{border:1px solid var(--hair);border-radius:999px;padding:7px 14px;font-size:var(--fs-small);white-space:nowrap;transition:background .2s,color .2s}
+.filters button sup{font-size:9px;margin-left:2px;font-variant-numeric:tabular-nums}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--plaster);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gap);transition:opacity .3s}
+.grid.fading{opacity:0}
+.card{display:grid;gap:8px;align-content:start}
+.card .ph{aspect-ratio:var(--ar,4/3)}
+.card:hover .img{transform:scale(1.04)}
+.card .cap{display:flex;font-size:var(--fs-small);justify-content:space-between;gap:12px}
+.card .cap span{color:var(--muted)}
+.card[hidden]{display:none}
+.g1{grid-column:1/span 7;--ar:1.618/1}.g2{grid-column:8/span 5;--ar:4/5}
+.g3{grid-column:1/span 4;--ar:4/5}.g4{grid-column:5/span 8;--ar:16/9}
+.g5{grid-column:2/span 5;--ar:4/5}.g6{grid-column:7/span 6;--ar:1/1}
+.g7{grid-column:1/span 8;--ar:16/9}.g8{grid-column:9/span 4;--ar:4/5}
+/* Photo shapes come from one list only: 1:1, 4:5, φ:1, 16:9. */
+.grid.filtered .card{grid-column:span 4;--ar:1.618/1}
+@media (max-width:900px){.grid .card,.grid.filtered .card{grid-column:1/-1;--ar:1.618/1}}
+@media (hover:none),(max-width:900px){.card .cap{display:flex}}
+.cursor{position:fixed;left:0;top:0;z-index:40;pointer-events:none;background:var(--ink);color:#fff;font-size:var(--fs-small);padding:8px 14px 8px 12px;opacity:0;transition:opacity .2s;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);white-space:nowrap}
+.cursor.show{opacity:1}
+.cursor span{opacity:.75}
+
+/* ---------- featured slider ---------- */
+.featured{margin-top:var(--section);position:relative;height:min(94svh,900px);min-height:620px;color:var(--plaster);overflow:hidden;background:var(--charcoal)}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease;visibility:hidden}
+.slide.on{opacity:1;visibility:visible}
+.slide .ph{position:absolute;inset:0}
+.slide .img{transform:scale(1.06);transition:transform 6s ease}
+.slide.on .img{transform:scale(1)}
+.slide .shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7),rgba(0,0,0,.05) 60%)}
+.slide .content{position:absolute;inset:auto 0 0 0}
+.slide .inner{display:grid;grid-template-columns:repeat(12,1fr);column-gap:48px;align-items:end;padding-bottom:28px}
+.slide h2{grid-column:1/span 7;font-size:var(--fs-xl);line-height:1;letter-spacing:var(--tr-xl)}
+.slide .brief{grid-column:8/span 5;display:grid;gap:10px}
+.slide .brief .serif{font-style:italic}
+.slide .facts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 40px;border-top:1px solid rgba(255,255,255,.3);margin-top:28px;padding-top:14px;font-size:var(--fs-label)}
+.slide .facts b{font-weight:400;opacity:.65;margin-right:8px}
+.fctl{position:absolute;top:96px;left:0;right:0;z-index:2}
+.fctl .wrap{display:flex;justify-content:space-between;align-items:center}
+.fctl .n{font-size:var(--fs-small);font-variant-numeric:tabular-nums}
+.fctl .btns{display:flex;gap:8px}
+.fctl .btns button .arrowc{width:40px;height:40px}
+.fctl .btns button:hover .arrowc{background:var(--plaster);color:var(--ink)}
+@media (max-width:900px){.slide h2,.slide .brief{grid-column:1/-1}.slide .brief{margin-top:18px}}
+
+/* ---------- drawn plan (wow 2) ---------- */
+.planblock{padding-block:var(--section)}
+.planwrap{display:grid;grid-template-columns:repeat(12,1fr);column-gap:48px;row-gap:32px;align-items:start}
+.planwrap .pcopy{grid-column:1/span 4;display:grid;gap:18px;position:sticky;top:100px}
+.planwrap .pcopy p{color:var(--muted);max-width:44ch}
+.planwrap .drawing{grid-column:5/span 5;background:var(--paper);padding:24px;clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,0 100%)}
+.planwrap .view{grid-column:10/span 3;display:grid;gap:10px}
+.planwrap .view .ph{aspect-ratio:3/4}
+.plan{width:100%;height:auto;display:block}
+.plan .w{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:square}
+.plan .t{fill:none;stroke:var(--ink);stroke-width:1}
+.plan .g{fill:none;stroke:var(--stone);stroke-width:.75;stroke-dasharray:3 4}
+.plan .draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+.plan.drawn .draw{stroke-dashoffset:0;transition:stroke-dashoffset 2.4s var(--settle)}
+.plan .room{fill:transparent;cursor:pointer;transition:fill .2s}
+.plan .room:hover,.plan .room.on,.plan .room:focus{fill:rgba(0,0,0,.07);outline:none}
+.plan text{font:11px var(--sans);fill:var(--muted)}
+.plan text.scale{font-size:10px}
+@media (max-width:900px){.planwrap .pcopy,.planwrap .drawing,.planwrap .view{grid-column:1/-1;position:static}.planwrap .view .ph{aspect-ratio:4/3}}
+
+/* ---------- process ---------- */
+.process{padding-bottom:var(--section)}
+.proc{display:grid;grid-template-columns:repeat(12,1fr);column-gap:48px}
+.phases{grid-column:1/span 3;display:grid;align-content:start;border-top:1px solid var(--hair)}
+.phases button{display:flex;gap:14px;text-align:left;padding:14px 0;border-bottom:1px solid var(--hair);color:var(--muted);transition:color .2s;font-size:max(15px,1.05vw)}
+.phases button .chip{font-size:var(--fs-label);padding-top:3px}
+.phases button[aria-current="true"]{color:var(--ink)}
+.cards-vp{grid-column:4/-1;overflow:hidden;min-width:0}
+.cards{display:flex;gap:var(--gap);will-change:transform}
+/* Process card: 1 : φ (1.618) tall; top and bottom split 61.8 : 38.2; icon is φ⁻² (38.2%) of the card width. */
+.pcard{--w:max(300px,22vw);flex:0 0 var(--w);height:calc(var(--w) * 1.618);display:flex;flex-direction:column;transition:transform .6s var(--settle);clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,0 100%)}
+.pcard .top{position:relative;background:var(--dusk);color:var(--ink);padding:calc(var(--w) * .0902);display:grid;grid-template-rows:auto 1fr auto;flex:0 0 61.8%;transition:background .5s var(--settle),color .5s var(--settle)}
+.pcard .bign{position:absolute;right:calc(var(--w) * .0902);top:calc(var(--w) * .0557);font-size:calc(var(--w) * .236);line-height:1;letter-spacing:-.05em;font-weight:300;font-variant-numeric:tabular-nums;opacity:.16;transition:opacity .5s}
+.pcard:hover .top,.pcard:focus-within .top{background:var(--ink);color:#fff}
+.pcard:hover .bign{opacity:.35}
+.pcard:hover{transform:translateY(-8px)}
+.pcard .ico{width:calc(var(--w) * .382);height:calc(var(--w) * .382);align-self:center;overflow:visible}
+.pcard .ico *{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pcard .ico [pathLength]{stroke-dasharray:1;stroke-dashoffset:0}
+.pcard .ico .mv{transform-box:view-box;transition:transform .9s var(--settle)}
+.pcard .ico .hint{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .9s var(--settle)}
+/* Each icon acts out its step on hover. */
+.pcard:hover .i0 .mv{transform:rotate(200deg)} .i0 .mv{transform-origin:24px 24px}
+.pcard:hover .i1 .mv{transform:translate(-3px,3px) rotate(-6deg)} .i1 .mv{transform-origin:24px 24px}
+.pcard:hover .i1 .hint,.pcard:hover .i3 .hint{stroke-dashoffset:0}
+.pcard:hover .i2 .mv{transform:rotate(-14deg)} .i2 .mv{transform-origin:8px 40px}
+.pcard:hover .i3 .mv{transform:scale(.86)} .i3 .mv{transform-origin:24px 29px}
+.pcard:hover .i4 .mv{transform:rotate(-90deg)} .i4 .mv{transform-origin:15px 24px}
+.pcard .top .num{font-size:var(--fs-label);font-variant-numeric:tabular-nums}
+.pcard .top h3{font-size:var(--fs-m);letter-spacing:var(--tr-m);line-height:1.08}
+.pcard .bot{flex:1;background:var(--charcoal);color:var(--plaster);padding:calc(var(--w) * .0902);display:grid;align-content:start;gap:calc(var(--w) * .0344);font-size:var(--fs-small);line-height:1.5}
+.pcard .bot .label{color:rgba(255,255,255,.6)}
+/* Not pinned (phones, reduced motion): cards simply wrap into a grid, nothing is cut off. */
+.process:not(.pinned) .cards{flex-wrap:wrap}
+.process:not(.pinned) .pcard{--w:max(260px,22vw);flex:1 1 var(--w)}
+@media (max-width:900px){.phases{display:none}.cards-vp{grid-column:1/-1}}
+/* Stacked layouts on narrow screens drop the 12-column grid so its gaps cannot push text past the edge. */
+@media (max-width:900px){
+  .cols,.planwrap,.slide .inner,.proc,.curtain .wrap{grid-template-columns:1fr;column-gap:0}
+  .cols>*,.planwrap>*,.slide .inner>*,.proc>*,.curtain .wrap>*{grid-column:1/-1}
+}
+
+/* ---------- statement ---------- */
+.stmt{padding-block:var(--section);text-align:center;display:grid;gap:18px;justify-items:center}
+.stmt .statement{max-width:18ch}
+.stmt .serif{font-style:italic;color:var(--muted)}
+
+/* ---------- journal ---------- */
+.journal{padding-bottom:var(--section)}
+.jrow{display:grid;grid-template-columns:160px 1fr auto auto;gap:24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--hair);transition:background .2s}
+.jrow:first-of-type{border-top:1px solid var(--hair)}
+.jrow:hover{background:var(--paper)}
+.jrow .jt{font-size:var(--fs-s);letter-spacing:var(--tr-s);line-height:1.25}
+.jrow .date{font-size:var(--fs-label);color:var(--muted);font-variant-numeric:tabular-nums}
+.jrow .arrowc{transition:background .2s,color .2s}
+.jrow:hover .arrowc{background:var(--ink);color:var(--plaster);border-color:var(--ink)}
+@media (max-width:700px){.jrow{grid-template-columns:1fr auto;gap:8px 16px}.jrow .jtag{grid-column:1/-1}.jrow .date{grid-row:3}.jrow .arrowc{grid-row:2/4;grid-column:2}}
+
+/* ---------- let's talk ---------- */
+.contact{position:relative;min-height:720px;display:flex;align-items:center}
+.contact > .ph{position:absolute;inset:0}
+.contact .wrap{position:relative;width:100%;padding-block:80px}
+.ccard{background:var(--paper);max-width:560px;padding:36px;display:grid;gap:28px;clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,0 100%)}
+.ccard .statement{font-size:var(--fs-m);line-height:1.12}
+.crow{display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:1px solid var(--hair);padding-top:14px;font-size:max(15px,1.05vw);flex-wrap:wrap}
+.crow .label{width:100%}
+.copy{font-size:var(--fs-label);border:1px solid var(--hair);border-radius:999px;padding:5px 12px}
+.copy:hover{background:var(--ink);color:var(--paper)}
+
+/* ---------- footer ---------- */
+.ft{background:var(--olive);color:var(--plaster);position:relative;overflow:hidden}
+.ft .wrap{display:grid;grid-template-columns:auto 1fr;column-gap:56px;padding-block:72px 28px}
+.vword{writing-mode:vertical-rl;transform:rotate(180deg);font-size:clamp(90px,14vw,210px);line-height:.8;letter-spacing:-.045em;font-weight:400;display:flex;align-items:center}
+.vword i{display:block;width:.9vw;min-width:4px;height:1px;background:none;font-style:normal}
+.vword .lb{display:inline-block;width:2px;height:.5em;background:#FFFFFF;margin-block:.12em;writing-mode:horizontal-tb}
+.fmain{display:grid;gap:56px;align-content:space-between}
+.bignav{display:grid;gap:4px}
+.bignav a{font-size:var(--fs-l);letter-spacing:var(--tr-l);line-height:1.06;width:max-content;max-width:100%}
+.fcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:28px;font-size:var(--fs-small)}
+.fcols .label{color:rgba(255,255,255,.6);margin-bottom:8px}
+.fcols p{line-height:1.6}
+.ruler{position:relative;border-top:1px solid rgba(255,255,255,.3);padding-top:14px}
+.ticks{height:18px;position:relative;margin-bottom:12px;background-image:repeating-linear-gradient(to right,rgba(255,255,255,.5) 0 1px,transparent 1px 10%),repeating-linear-gradient(to right,rgba(255,255,255,.25) 0 1px,transparent 1px 2%);background-size:100% 18px,100% 8px;background-repeat:no-repeat;background-position:0 0,0 0}
+.marker{position:absolute;top:-6px;width:2px;height:30px;background:#FFFFFF;left:0;will-change:transform}
+.rulerline{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:var(--fs-small)}
+.rulerline .n{font-variant-numeric:tabular-nums}
+.top-link{display:inline-flex;gap:10px;align-items:center}
+@media (max-width:700px){.ft .wrap{grid-template-columns:1fr}.vword{writing-mode:horizontal-tb;transform:none;font-size:22vw;margin-bottom:40px}.vword .lb{width:.5em;height:2px;writing-mode:horizontal-tb}}
+.note{font-size:var(--fs-label);color:rgba(255,255,255,.55);margin-top:28px}
+
+/* reveals: visible at rest, only the transition is added */
+/* Motion timing, measured from the LPAS recording. Change here, applies everywhere. */
+/* photo curtain before the footer */
+.curtain{position:relative;height:min(100svh,900px);min-height:560px;overflow:hidden;color:var(--plaster)}
+.curtain .ph{position:absolute;inset:-12% 0;will-change:transform}
+.curtain .ph::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.5)}
+.curtain .wrap{position:relative;height:100%;display:grid;grid-template-columns:repeat(12,1fr);column-gap:48px;align-content:start;padding-top:72px}
+.curtain .col1{grid-column:1/span 4}.curtain .col2{grid-column:5/span 4}
+.curtain .label{color:rgba(255,255,255,.7);margin-bottom:10px}
+.curtain a{display:block;font-size:var(--fs-m);letter-spacing:var(--tr-m);line-height:1.18;width:max-content}
+@media (max-width:900px){.curtain .wrap{grid-template-columns:1fr;column-gap:0}.curtain .col1,.curtain .col2{grid-column:1/-1}}
+@media (max-width:700px){.curtain{height:auto;min-height:100svh}.curtain .wrap{padding-block:96px 72px}.curtain .col1,.curtain .col2{grid-column:1/-1;margin-bottom:28px}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.2s!important;transition-delay:0s!important;animation:none!important}
+  .hero .shot .img,.slide .img{transform:none!important}
+  .loader{display:none}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<!-- Loader (wow 1): letters of the name open into the studio's process -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="lw">
+    <span class="row"><b>S</b><span class="rest">ite</span></span>
+    <span class="row"><b>P</b><span class="rest">lan</span></span>
+    <span class="row"><b>A</b><span class="rest">rrange</span></span>
+    <span class="row"><b>C</b><span class="rest">raft</span></span>
+    <span class="row"><b>E</b><span class="rest">nter</span></span>
+    <span class="in"><i></i>in<span class="rest">habit</span></span>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="hdr on-dark" id="hdr">
+  <div class="wrap">
+    <div class="clock" aria-label="Studio time in Indore"><span id="clk">(00)(00)</span> IST · Indore</div>
+    <button class="pill" id="menuBtn" aria-expanded="false" aria-controls="menu">Space<span class="bar"></span>in <span class="mn">Menu</span></button>
+    <a class="talk" href="#talk"><span class="t">Let's talk</span><span class="arrowc">→</span></a>
+  </div>
+</header>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="wrap">
+    <div class="top">
+      <div class="clock" style="color:var(--plaster)">Architecture + Interiors</div>
+      <button class="pill" id="menuClose">Space<span class="bar"></span>in <span class="mn">Close</span></button>
+      <span></span>
+    </div>
+    <nav>
+      <a href="projects.html"><small class="chip">(01)</small>Projects</a>
+      <a href="focus.html"><small class="chip">(02)</small>Focus</a>
+      <a href="#process"><small class="chip">(03)</small>Approach</a>
+      <a href="#intro"><small class="chip">(04)</small>Studio</a>
+      <a href="#journal"><small class="chip">(05)</small>Journal</a>
+      <a href="#talk"><small class="chip">(06)</small>Contact</a>
+    </nav>
+    <div class="meta"><span>studio@space-in.example</span><span>+91 731 000 0000</span><span>Mon to Sat, 10:00 to 19:00</span><span>Instagram · LinkedIn</span></div>
+  </div>
+</div>
+
+<div id="scroller"><div id="content">
+<main>
+<!-- Hero + focus: panels slide in over the hero as you scroll -->
+<section class="stage" id="hero" data-dark>
+  <div class="pin">
+    <div class="hero" id="heroPane">
+      <div class="shots">
+        <div class="shot on ph"><div class="img" data-room="hero"></div></div>
+        <div class="shot ph"><div class="img" data-room="featured-1"></div></div>
+        <div class="shot ph"><div class="img" data-room="room-court"></div></div>
+      </div>
+      <div class="meta top wrap"><span>Architecture + Interiors</span><span>Light, let in</span><span>Scroll to explore<span class="dot">↓</span></span></div>
+      <div class="content"><div class="wrap">
+        <h1>We're an architecture and interiors studio <span class="second">designed from the inside out.</span></h1>
+        <div class="meta"><span>Indore, Madhya Pradesh</span><span>Homes, workplaces and places to gather</span></div>
+      </div></div>
+    </div>
+    <div class="veil" id="veil"></div>
+    <div class="track" id="track"></div>
+  </div>
+</section>
+
+<!-- Studio intro -->
+<section class="intro" id="intro"><div class="wrap">
+  <div class="section-label label"><span>The studio</span><span class="chip">(01)</span></div>
+  <div class="cols">
+    <h2 class="statement big l5 rv">Designed from the <mark class="hl">inside out.</mark> <span class="stone">Shaped around the <mark class="hl">space in between.</mark></span></h2>
+    <div class="r4 rv">
+      <p>Space-in is an architecture and interiors studio in Indore. We start with how a room is used: where the light falls at 8 am, where people gather, where they want to be alone. The walls come after. Every project is drawn, detailed and built by one team, from the first site visit to the handover of keys.</p>
+      <a class="ulink" href="#process" style="width:max-content">The Space-in approach →</a>
+    </div>
+  </div>
+</div></section>
+
+
+<!-- Selected work -->
+<section class="work" id="work"><div class="wrap">
+  <div class="section-label label"><span>Selected work</span><span class="chip">(03)</span></div>
+  <div class="work-head">
+    <h2 class="title">A selection of our work</h2>
+    <div class="filters" id="filters" role="toolbar" aria-label="Filter projects"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+</div></section>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<!-- Featured -->
+<section class="featured dark" id="featured" data-dark aria-roledescription="carousel" aria-label="Featured projects">
+  <div class="fctl"><div class="wrap">
+    <span class="n" id="fcount">(01) / (03)</span>
+    <div class="btns">
+      <button id="fprev" aria-label="Previous project"><span class="arrowc">←</span></button>
+      <button id="fnext" aria-label="Next project"><span class="arrowc">→</span></button>
+    </div>
+  </div></div>
+  <div id="slides"></div>
+</section>
+
+<!-- Drawn plan -->
+<section class="planblock" id="plan"><div class="wrap">
+  <div class="section-label label"><span>From the drawing board · Courtyard House</span><span class="chip">(04)</span></div>
+  <div class="planwrap">
+    <div class="pcopy">
+      <h2 class="title">Every room starts as a line.</h2>
+      <p>The ground floor of Courtyard House, drawn at 1:100. Every room opens onto the court, so each one gets two walls of daylight and a through breeze from the south-west. Hover a room to see it built.</p>
+      <p class="label">Ground floor · 312 m² · North up</p>
+    </div>
+    <div class="drawing"><svg class="plan" id="planSvg" viewBox="0 0 520 440" role="img" aria-label="Ground floor plan of Courtyard House"></svg></div>
+    <div class="view">
+      <div class="ph" id="roomView" style="--tone:#7a6a5a"><div class="img" data-room="plan-court"></div><span class="ph-tag" id="roomTag">+ Courtyard</span></div>
+      <p class="label" id="roomNote">Open to the sky. 9.6 × 7.2 m, paved in Kota stone.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- Process -->
+<section class="process" id="process"><div class="wrap">
+  <div class="section-label label"><span>Our process</span><span class="chip">(05)</span></div>
+  <div class="proc">
+    <div class="phases" id="phases"></div>
+    <div class="cards-vp"><div class="cards" id="cards"></div></div>
+  </div>
+</div></section>
+
+<!-- Statement -->
+<section class="stmt"><div class="wrap" style="display:grid;gap:18px;justify-items:center">
+  <p class="statement big rv">A good room is the one you <mark class="hl">stop noticing.</mark></p>
+  <p class="serif rv">It just feels like the right place to be.</p>
+</div></section>
+
+<!-- Journal -->
+<section class="journal" id="journal"><div class="wrap">
+  <div class="section-label label"><span>Journal</span><span class="chip">(06)</span></div>
+  <div id="jlist"></div>
+</div></section>
+
+<!-- Let's talk -->
+<section class="contact" id="talk" data-dark>
+  <div class="ph" style="--tone:#7b6b58"><div class="img" data-room="talk"></div></div>
+  <div class="wrap">
+    <div class="ccard">
+      <p class="label">Let's talk</p>
+      <p class="statement">If you're planning a space worth living in, let's talk.</p>
+      <div style="display:grid;gap:14px">
+        <div class="crow"><span class="label">Email</span><span id="em">studio@space-in.example</span><button class="copy" data-copy="em">Copy</button></div>
+        <div class="crow"><span class="label">Phone</span><span id="ph">+91 731 000 0000</span><button class="copy" data-copy="ph">Copy</button></div>
+        <div class="crow"><span class="label">Studio hours</span><span>Mon to Sat, 10:00 to 19:00 IST</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- Photo curtain (after LPAS): the photo drifts slower than the page -->
+<section class="curtain" id="curtain" data-dark>
+  <div class="ph" style="--tone:#4a443d"><div class="img" data-room="room-living"></div></div>
+  <div class="wrap">
+    <div class="col1"><p class="label rv">Our focus</p><div id="curtainList"></div></div>
+    <div class="col2"><p class="label rv">Explore our</p><a class="ulink rv" href="projects.html">Projects</a><a class="ulink rv" href="#process" style="--d:90ms">Approach</a></div>
+  </div>
+</section>
+
+<!-- Footer (wow 4) -->
+<footer class="ft dark" data-dark>
+  <div class="wrap">
+    <div class="vword" aria-label="Space-in">Space<span class="lb"></span>in</div>
+    <div class="fmain">
+      <nav class="bignav">
+        <a class="ulink" href="projects.html">Projects</a><a class="ulink" href="focus.html">Focus</a><a class="ulink" href="#process">Approach</a><a class="ulink" href="#intro">Studio</a><a class="ulink" href="#journal">Journal</a><a class="ulink" href="#talk">Contact</a>
+      </nav>
+      <div class="fcols">
+        <div><p class="label">Studio</p><p>Space-in Architects<br>Indore, Madhya Pradesh</p></div>
+        <div><p class="label">Contact</p><p>studio@space-in.example<br>+91 731 000 0000</p></div>
+        <div><p class="label">Follow</p><p><a class="ulink" href="#talk">Instagram</a><br><a class="ulink" href="#talk">LinkedIn</a></p></div>
+        <div><p class="label">Careers</p><p>careers@space-in.example</p></div>
+      </div>
+      <div class="ruler">
+        <div class="ticks"><div class="marker" id="marker"></div></div>
+        <div class="rulerline">
+          <span>You've scrolled <span class="n" id="mtr">0.0 m</span>, <span id="sty">about 0.0 storeys</span>. Scale 1:1</span>
+          <a class="top-link ulink" href="#hero">Back to top ↑</a>
+        </div>
+        <p class="note">Prototype. Photographs are Unsplash placeholders; projects and contacts are samples until the studio's own content arrives.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(function(){
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = s => document.querySelector(s);
+
+/* ---- placeholder "photographs": a simple room in perspective, one grade ---- */
+function roomSVG(seed){
+  let s = 0; for (const c of seed) s = (s*31 + c.charCodeAt(0)) >>> 0;
+  const r = () => (s = (s*1664525 + 1013904223) >>> 0) / 4294967296;
+  const vx = 30 + r()*40, vy = 42 + r()*16;
+  const win = r() > .4, wx = 10 + r()*50, ww = 14 + r()*18;
+  const L = 'rgba(248,240,220,', lines = [];
+  // back wall rectangle
+  const bx1 = vx-18, bx2 = vx+18, by1 = vy-20, by2 = vy+16;
+  lines.push(`<rect x="${bx1}" y="${by1}" width="36" height="36" fill="${L}.07)" stroke="${L}.28)" stroke-width=".25"/>`);
+  [[0,0,bx1,by1],[100,0,bx2,by1],[0,100,bx1,by2],[100,100,bx2,by2]].forEach(([a,b,c,d]) =>
+    lines.push(`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke="${L}.22)" stroke-width=".25"/>`));
+  // floor boards
+  for (let i=1;i<6;i++){ const t=i/6; lines.push(`<line x1="${bx1+36*t}" y1="${by2}" x2="${100*t}" y2="100" stroke="${L}.08)" stroke-width=".2"/>`); }
+  // light shaft
+  if (win){
+    const x = bx1 + (wx/100)*20;
+    lines.push(`<rect x="${x}" y="${by1+6}" width="${ww/3}" height="18" fill="${L}.35)"/>`);
+    lines.push(`<polygon points="${x},${by1+24} ${x+ww/3},${by1+24} ${x+ww/3+22},100 ${x+8},100" fill="${L}.12)"/>`);
+  } else {
+    lines.push(`<rect x="${bx1+4}" y="${by1}" width="28" height="3" fill="${L}.4)"/>`);
+    lines.push(`<polygon points="${bx1+4},${by1+3} ${bx1+32},${by1+3} ${bx2+14},100 ${bx1-8},100" fill="${L}.09)"/>`);
+  }
+  return `<svg class="room" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${lines.join('')}</svg>`;
+}
+const slug = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+// Each slot reads photos/<name>.jpg. Replace a file with the studio's own photo under the same name.
+function photoFor(key){
+  if (key.startsWith('p-')) return slug(key.slice(2));
+  if (key.startsWith('f-')) return 'featured-' + (featured.findIndex(f=>f.n===key.slice(2))+1);
+  if (key.startsWith('plan-')) return 'room-' + key.slice(5);
+  if (key.startsWith('room-') || key.startsWith('featured-')) return key;
+  return key;
+}
+function paintRooms(root=document){ root.querySelectorAll('.img[data-room]:not([data-done])').forEach(el => {
+  const name = photoFor(el.dataset.room);
+  el.innerHTML = `<img src="photos/${name}.jpg" alt="" loading="${el.closest('.stage')?'eager':'lazy'}" decoding="async">`;
+  el.querySelector('img').onerror = () => { el.innerHTML = roomSVG(el.dataset.room); };
+  el.dataset.done=1; }); }
+
+/* ---- data ---- */
+const sectors = [
+  {k:'residential', n:'Residential', c:'var(--umber)', cls:'', tone:'#6f5e52', tag:'Homes that grow with the families in them.', subs:['Houses','Apartments','Farmhouses']},
+  {k:'interiors', n:'Interiors', c:'var(--terracotta)', cls:'', tone:'#8a6a58', tag:'Rooms made from plaster, timber and stone.', subs:['Residential interiors','Retail','Restoration']},
+  {k:'workplace', n:'Workplace', c:'var(--dusk)', cls:'dusk', tone:'#6b7078', tag:'Offices people choose to come back to.', subs:['Studios','Headquarters','Co-working']},
+  {k:'hospitality', n:'Hospitality', c:'var(--sage)', cls:'', tone:'#666b5c', tag:'Places to eat, stay and gather.', subs:['Cafés','Boutique stays','Clubs']},
+  {k:'institutional', n:'Institutional', c:'var(--blush)', cls:'blush', tone:'#86705f', tag:'Schools and libraries built for the long term.', subs:['Schools','Libraries','Community halls']},
+];
+const projects = [
+  {n:'Courtyard House', city:'Indore', s:'residential', tone:'#6f5e52', tag:'+ Courtyard'},
+  {n:'Stepwell Library', city:'Ujjain', s:'institutional', tone:'#7d6b5c', tag:'+ Reading well'},
+  {n:'Palasia Studio Offices', city:'Indore', s:'workplace', tone:'#686d73', tag:'+ Roof terrace'},
+  {n:'Lime Plaster Apartment', city:'Bhopal', s:'interiors', tone:'#8a6a58', tag:'+ Living room'},
+  {n:'Kund Café', city:'Indore', s:'hospitality', tone:'#666b5c', tag:'+ Garden court'},
+  {n:'Brick Villa', city:'Maheshwar', s:'residential', tone:'#7a5a4a', tag:'+ Verandah'},
+  {n:'School Pavilion', city:'Dewas', s:'institutional', tone:'#80735f', tag:'+ Assembly hall'},
+  {n:'Terrace Residence', city:'Bhopal', s:'residential', tone:'#5f5850', tag:'+ Terrace'},
+];
+const featured = [
+  {n:'Courtyard House', f:[['Location','Indore, Madhya Pradesh'],['Typology','Private house'],['Area','312 m² · 2 storeys'],['Status','Completed 2025']], brief:'A family of three generations wanted one house that still let each of them close a door. We gave every room a wall on the courtyard.', tone:'#6a5a4c'},
+  {n:'Stepwell Library', f:[['Location','Ujjain, Madhya Pradesh'],['Typology','Public library'],['Area','1,850 m² · 3 levels'],['Status','On site']], brief:'A reading room that steps down into the ground, where the air stays cool in May without a single air conditioner.', tone:'#76675a'},
+  {n:'Palasia Studio Offices', f:[['Location','Indore, Madhya Pradesh'],['Typology','Workplace'],['Area','2,400 m² · 4 storeys'],['Status','Design stage']], brief:'A design studio for 120 people, facing north for even light and opening onto a shaded roof where the team eats together.', tone:'#61666c'},
+];
+const phases = [
+  ['Listen + read the site','We walk the site at three times of day and listen to how you live or work now.','A site study and a written brief','2 to 3 weeks'],
+  ['Sketch + concept','Hand sketches and study models test two or three ways to arrange the rooms.','Concept drawings and a model','4 to 6 weeks'],
+  ['Design + detail','Plans, sections and material samples are fixed down to the handle on each door.','Drawings at 1:50 and 1:20, a materials board','8 to 12 weeks'],
+  ['Approvals + drawings','We prepare the permit set and the drawings contractors price and build from.','Permit set, tender drawings, costing','6 to 10 weeks'],
+  ['Site + handover','We are on site every week until the last coat of plaster, then hand over the keys.','Site reports, a snag list, as-built drawings','Length of build'],
+];
+const journal = [
+  ['Studio','Why we still draw every plan by hand first','18','09','2026'],
+  ['Project','Stepwell Library breaks ground in Ujjain','02','08','2026'],
+  ['Materials','Lime plaster: a wall that breathes','14','06','2026'],
+  ['Award','Courtyard House shortlisted for a residential design award','21','04','2026'],
+];
+
+/* ---- focus panels ---- */
+$('#track').insertAdjacentHTML('beforeend', sectors.map((s,i)=>`
+  <a class="panel ${s.cls}" href="focus.html#${s.k}" data-f="${s.k}" style="--c:${s.c}">
+    <div class="ph" style="--tone:${s.tone}"><div class="img" data-room="focus-${s.k}"></div></div>
+    <span class="plus" aria-hidden="true">+</span>
+    <div class="blk">
+      <div class="subs">${s.subs.map(x=>`<span>${x} ›</span>`).join('')}</div>
+      <h3 class="fx">${s.n}</h3>
+      <p class="side fx">${s.tag}</p>
+      <span class="count fx">${i+1}/5</span>
+    </div>
+  </a>`).join(''));
+// Each panel opens that sector's Focus page.
+
+const stage=$('#hero'), track=$('#track'), veil=$('#veil'), heroPane=$('#heroPane'), heroContent=$('#heroPane .content'), panels=[...document.querySelectorAll('.stage .panel')];
+
+/* hero photographs change slowly */
+const shots=[...document.querySelectorAll('.hero .shot')]; let si=0;
+if(!reduce) setInterval(()=>{ shots[si].classList.remove('on'); si=(si+1)%shots.length; shots[si].classList.add('on'); }, 5500);
+
+/* ---- work grid + filters ---- */
+$('#grid').innerHTML = projects.map((p,i)=>`
+  <a class="card g${i+1}" href="#work" data-s="${p.s}" data-label="${p.tag.replace('+ ','')}" data-name="${p.n}" data-city="${p.city}">
+    <div class="ph" style="--tone:${p.tone}"><div class="img" data-room="p-${p.n}"></div><span class="ph-tag">${p.tag}</span></div>
+    <div class="cap">${p.n}<span>${p.city}</span></div>
+  </a>`).join('');
+const counts = {all:projects.length}; projects.forEach(p=>counts[p.s]=(counts[p.s]||0)+1);
+$('#filters').innerHTML = [['all','All'],...sectors.map(s=>[s.k,s.n])].map(([k,n])=>
+  `<button data-k="${k}" aria-pressed="${k==='all'}">${n}<sup>${counts[k]||0}</sup></button>`).join('');
+function setFilter(k, push=true){
+  if(!counts[k]) k='all';
+  const g = $('#grid');
+  g.classList.add('fading');
+  setTimeout(()=>{
+    g.querySelectorAll('.card').forEach(c=>c.hidden = k!=='all' && c.dataset.s!==k);
+    g.classList.toggle('filtered', k!=='all');
+    g.classList.remove('fading');
+  }, reduce?0:300);
+  document.querySelectorAll('#filters button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===k));
+  if(push){ try{ history.replaceState(null,'', k==='all' ? '#work' : '#'+k); }catch(e){} }
+}
+$('#filters').addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) setFilter(b.dataset.k); });
+const h0 = location.hash.slice(1); if(counts[h0] && h0!=='all') setFilter(h0,false);
+
+/* cursor label */
+const cur = $('#cursor');
+if (matchMedia('(hover:hover)').matches){
+  document.querySelectorAll('.card').forEach(c=>{
+    c.addEventListener('mouseenter',e=>{ cur.style.transform=`translate(${e.clientX+16}px,${e.clientY+16}px)`; cur.innerHTML = `+ ${c.dataset.name}, <span>${c.dataset.city}</span>`; cur.classList.add('show'); });
+    c.addEventListener('mouseleave',()=>cur.classList.remove('show'));
+    c.addEventListener('mousemove',e=>{ cur.style.transform=`translate(${e.clientX+16}px,${e.clientY+16}px)`; });
+  });
+}
+
+/* ---- featured slider ---- */
+$('#slides').innerHTML = featured.map((p,i)=>`
+  <article class="slide${i===0?' on':''}" aria-roledescription="slide" aria-label="${i+1} of 3">
+    <div class="ph" style="--tone:${p.tone}"><div class="img" data-room="f-${p.n}"></div></div>
+    <div class="shade"></div>
+    <div class="content"><div class="wrap"><div class="inner">
+      <h2>${p.n}</h2>
+      <div class="brief"><span class="label" style="color:rgba(255,255,255,.7)">The brief</span><p class="serif">${p.brief}</p></div>
+      <div class="facts">${p.f.map(([a,b])=>`<span><b>${a}</b>${b}</span>`).join('')}</div>
+    </div></div></div>
+  </article>`).join('');
+let fi=0, ftimer=null, fpaused=false;
+const slides=[...document.querySelectorAll('.slide')];
+function go(n){ fi=(n+slides.length)%slides.length; slides.forEach((s,i)=>s.classList.toggle('on',i===fi)); $('#fcount').textContent=`(0${fi+1}) / (03)`; }
+function arm(){ clearInterval(ftimer); if(!reduce) ftimer=setInterval(()=>{ if(!fpaused) go(fi+1); },7000); }
+$('#fprev').onclick=()=>{go(fi-1);arm();}; $('#fnext').onclick=()=>{go(fi+1);arm();};
+const feat=$('#featured');
+feat.addEventListener('mouseenter',()=>fpaused=true); feat.addEventListener('mouseleave',()=>fpaused=false);
+feat.addEventListener('focusin',()=>fpaused=true); feat.addEventListener('focusout',()=>fpaused=false);
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeMenu();
+  const r=feat.getBoundingClientRect(); if(r.top<innerHeight*.5 && r.bottom>innerHeight*.5 && !menu.classList.contains('open')){
+    if(e.key==='ArrowRight'){go(fi+1);arm();} if(e.key==='ArrowLeft'){go(fi-1);arm();}
+  }
+});
+let tx=null; feat.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+feat.addEventListener('touchend',e=>{ if(tx==null)return; const d=e.changedTouches[0].clientX-tx; if(Math.abs(d)>40){go(fi+(d<0?1:-1));arm();} tx=null; });
+arm();
+
+/* ---- drawn plan (1:100, 1 unit = 5 cm) ---- */
+const planWalls = [
+  'M40 40 H480 V400 H40 Z',           // outer
+  'M170 40 V150', 'M350 40 V150',     // north rooms
+  'M40 150 H130', 'M210 150 H310', 'M390 150 H480', // court north edge with openings
+  'M170 150 V290', 'M350 150 V290',
+  'M40 290 H120', 'M200 290 H320', 'M400 290 H480',
+  'M260 290 V400',
+];
+const rooms = [
+  {id:'court', x:170,y:150,w:180,h:140, n:'Courtyard', note:'Open to the sky. 9.6 × 7.2 m, paved in Kota stone.', tone:'#7a6a5a'},
+  {id:'living', x:40,y:150,w:130,h:140, n:'Living room', note:'Double height, with a jaali screen to the west.', tone:'#6d5b4d'},
+  {id:'kitchen', x:350,y:150,w:130,h:140, n:'Kitchen', note:'Morning light from the east over the prep counter.', tone:'#806a55'},
+  {id:'bed1', x:40,y:40,w:130,h:110, n:'Grandparents’ room', note:'Ground floor, step-free, facing the court.', tone:'#6a5e55'},
+  {id:'study', x:170,y:40,w:180,h:110, n:'Study', note:'North light only. Shelves in teak, 3.2 m high.', tone:'#5f5850'},
+  {id:'dining', x:350,y:40,w:130,h:110, n:'Dining', note:'Seats twelve. Opens to the court on two sides.', tone:'#7b6452'},
+  {id:'entry', x:40,y:290,w:220,h:110, n:'Entrance verandah', note:'A deep shaded threshold, 2.4 m from the street.', tone:'#75685b'},
+  {id:'bed2', x:260,y:290,w:220,h:110, n:'Guest room', note:'With its own garden and an outdoor shower.', tone:'#685c52'},
+];
+const svg = $('#planSvg');
+svg.innerHTML =
+  `<g class="gridlines">${[40,150,290,400].map(y=>`<line class="g" x1="20" x2="500" y1="${y}" y2="${y}"/>`).join('')}</g>` +
+  rooms.map(r=>`<rect class="room" tabindex="0" data-id="${r.id}" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}"><title>${r.n}</title></rect>`).join('') +
+  planWalls.map(d=>`<path class="w draw" d="${d}"/>`).join('') +
+  `<path class="t draw" d="M200 290 A40 40 0 0 1 160 290"/><path class="t draw" d="M320 290 A40 40 0 0 0 360 290"/>` +
+  rooms.map(r=>`<text x="${r.x+r.w/2}" y="${r.y+r.h/2+4}" text-anchor="middle" pointer-events="none">${r.n}</text>`).join('') +
+  `<g transform="translate(40,425)"><line class="t" x1="0" x2="100" y1="0" y2="0"/><line class="t" x1="0" x2="0" y1="-4" y2="4"/><line class="t" x1="50" x2="50" y1="-3" y2="3"/><line class="t" x1="100" x2="100" y1="-4" y2="4"/><text class="scale" x="108" y="4">5 m · 1:100</text></g>` +
+  `<g transform="translate(470,425)"><path class="t" d="M0 6 L0 -10 M-4 -5 L0 -10 L4 -5"/><text class="scale" x="8" y="4">N</text></g>`;
+svg.querySelectorAll('.draw').forEach(p=>{ const l=Math.ceil(p.getTotalLength()); p.style.setProperty('--len',l); });
+function showRoom(id){
+  const r = rooms.find(x=>x.id===id); if(!r) return;
+  svg.querySelectorAll('.room').forEach(el=>el.classList.toggle('on', el.dataset.id===id));
+  const v=$('#roomView'); v.style.setProperty('--tone', r.tone);
+  const img=v.querySelector('.img'); img.dataset.room='plan-'+id; delete img.dataset.done; paintRooms(v);
+  $('#roomTag').textContent='+ '+r.n; $('#roomNote').textContent=r.note;
+}
+svg.querySelectorAll('.room').forEach(el=>{ el.addEventListener('mouseenter',()=>showRoom(el.dataset.id)); el.addEventListener('focus',()=>showRoom(el.dataset.id)); el.addEventListener('click',()=>showRoom(el.dataset.id)); });
+showRoom('court');
+if (reduce || !('IntersectionObserver' in window)) svg.classList.add('drawn');
+else {
+  // Drawn state is the resting state if the observer never fires (e.g. thumbnails).
+  svg.querySelectorAll('.draw').forEach(p=>p.style.transition='none');
+  const pio = new IntersectionObserver(es=>{ if(es[0].isIntersecting){ svg.querySelectorAll('.draw').forEach(p=>p.style.transition=''); svg.classList.add('drawn'); pio.disconnect(); } },{threshold:.35});
+  pio.observe(svg);
+  setTimeout(()=>{ if(!svg.classList.contains('drawn') && svg.getBoundingClientRect().top < innerHeight) svg.classList.add('drawn'); }, 3000);
+}
+
+/* ---- process ---- */
+// Line icons drawn for each phase (compass, pencil, set square, stamped sheet, key).
+// Each icon: outline paths draw in (pathLength=1); .mv is the part that moves on hover; .hint appears on hover.
+const phaseIcons = [
+  '<circle pathLength="1" cx="24" cy="24" r="18"/><path pathLength="1" d="M24 4v6M24 38v6M4 24h6M38 24h6"/><g class="mv"><path pathLength="1" d="M24 12l5 12-5 3-5-3z"/><path pathLength="1" d="M24 36l-3-9 3 0 3 0z"/></g>',
+  '<path class="hint" pathLength="1" d="M6 44c8-3 16 1 24-2"/><g class="mv"><path pathLength="1" d="M10 38l4-11L33 8l7 7-19 19z"/><path pathLength="1" d="M29 12l7 7M14 27l7 7"/></g>',
+  '<path pathLength="1" d="M4 44h40"/><g class="mv"><path pathLength="1" d="M8 40V8l32 32z"/><path pathLength="1" d="M15 33V23l10 10z"/><path pathLength="1" d="M8 15h4M8 21h3M8 27h4M8 33h3"/></g>',
+  '<path pathLength="1" d="M11 4h19l8 8v32H11z"/><path pathLength="1" d="M30 4v8h8"/><g class="mv"><circle pathLength="1" cx="24" cy="29" r="8"/></g><path class="hint" pathLength="1" d="M20 29l3 3 5-6"/>',
+  '<g class="mv"><circle pathLength="1" cx="15" cy="24" r="8"/><path pathLength="1" d="M23 24h21M38 24v7M32 24v5"/></g><path pathLength="1" d="M12 24h0"/>'
+];
+$('#phases').innerHTML = phases.map((p,i)=>`<button data-i="${i}" aria-current="${i===0}"><span class="chip">(0${i+1})</span>${p[0]}</button>`).join('');
+$('#cards').innerHTML = phases.map((p,i)=>`
+  <article class="pcard" id="pc${i}">
+    <div class="top"><span class="num">(0${i+1}) / (05)</span><span class="bign" aria-hidden="true">0${i+1}</span><svg class="ico i${i}" viewBox="0 0 48 48" aria-hidden="true">${phaseIcons[i]}</svg><h3>${p[0]}</h3></div>
+    <div class="bot"><p>${p[1]}</p><div><p class="label">You receive</p><p>${p[2]}</p></div><div><p class="label">Takes about</p><p>${p[3]}</p></div></div>
+  </article>`).join('');
+const cardsEl=$('#cards');
+const phaseBtns=[...document.querySelectorAll('#phases button')];
+function markPhase(i){ phaseBtns.forEach(b=>b.setAttribute('aria-current', +b.dataset.i===i)); }
+let goPhase = i => $('#pc'+i).scrollIntoView({block:'nearest'});
+$('#phases').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) goPhase(+b.dataset.i); });
+
+/* ---- journal ---- */
+$('#jlist').innerHTML = journal.map(j=>`
+  <a class="jrow" href="#journal"><span class="jtag label">${j[0]}</span><span class="jt">${j[1]}</span><span class="date chip">(${j[2]})(${j[3]})(${j[4]})</span><span class="arrowc">→</span></a>`).join('');
+
+paintRooms();
+
+/* ---- clock ---- */
+function tick(){
+  try{
+    const p = new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
+    const h=p.find(x=>x.type==='hour').value, m=p.find(x=>x.type==='minute').value;
+    $('#clk').textContent=`(${h})(${m})`;
+  }catch(e){}
+}
+tick(); setInterval(tick, 15000);
+
+/* ---- menu ---- */
+const menu=$('#menu'), mb=$('#menuBtn');
+function openMenu(){ menu.classList.add('open'); mb.setAttribute('aria-expanded','true'); setTimeout(()=>$('#menuClose').focus(),50); document.querySelectorAll('.menu nav a').forEach((a,i)=>a.style.transitionDelay=(reduce?0:250+i*40)+'ms'); }
+function closeMenu(){ if(!menu.classList.contains('open'))return; menu.classList.remove('open'); mb.setAttribute('aria-expanded','false'); document.querySelectorAll('.menu nav a').forEach(a=>a.style.transitionDelay='0ms'); mb.focus(); }
+mb.onclick=openMenu; $('#menuClose').onclick=closeMenu;
+menu.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',closeMenu));
+
+/* ---- copy buttons ---- */
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
+  const el=document.getElementById(b.dataset.copy), t=el.textContent;
+  const done=()=>{ b.textContent='Copied'; setTimeout(()=>b.textContent='Copy',1600); };
+  const sel=()=>{ const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent='Selected'; setTimeout(()=>b.textContent='Copy',1600); };
+  try{ navigator.clipboard.writeText(t).then(done,sel); }catch(e){ sel(); }
+}));
+
+/* ---- photo curtain content ---- */
+$('#curtainList').innerHTML = sectors.map(s=>`<a class="ulink" href="focus.html#${s.k}">${s.n}</a>`).join('');
+const cur2=$('#curtain'), cph=cur2.querySelector('.ph');
+paintRooms(cur2);
+
+/* =====================================================================
+   Motion engine: Lenis (smooth scroll) + GSAP ScrollTrigger.
+   Every duration and curve lives in M, so the whole site keeps one rhythm.
+   ===================================================================== */
+const hdr=$('#hdr'), loader=$('#loader'), pin=$('.pin'), pill=$('#menuBtn');
+const mtr=$('#mtr'), sty=$('#sty'), marker=$('#marker');
+const PX_TO_M = 0.0254/96; // one CSS pixel is 1/96 inch
+const G = window.gsap, ST = window.ScrollTrigger;
+const textSel='main .section-label, main h2, .intro .r4 p, .intro .r4 a, .stmt p, .planwrap .pcopy > *, .jrow, .pcard, .ccard > *, .work-head .filters, .curtain .label, .curtain a';
+
+const scroller=$('#scroller');
+const own = innerHeight >= 400 && innerHeight <= Math.max(screen.height,900)*1.25;
+if(own) document.documentElement.classList.add('own');
+const SC = own ? scroller : window;
+const scTop = () => own ? scroller.scrollTop : scrollY;
+const scMax = () => own ? scroller.scrollHeight - scroller.clientHeight : document.documentElement.scrollHeight - innerHeight;
+function status(){} // motion state is no longer shown on the page
+function finishWithoutMotion(why){
+  status('off (' + why + ')');
+  loader.classList.add('done'); heroPane.classList.add('in'); pin.style.clipPath=''; document.documentElement.classList.remove('lenis-stopped');
+  stage.classList.add('flat');
+  SC.addEventListener('scroll',()=>{ ruler(scTop(), scMax()); },{passive:true});
+}
+function ruler(y,max){
+  const m=y*PX_TO_M;
+  mtr.textContent=m.toFixed(1)+' m'; sty.textContent='about '+(m/3).toFixed(1)+' storeys';
+  marker.style.transform=`translateX(${(Math.min(1,y/Math.max(1,max))*marker.parentElement.clientWidth).toFixed(0)}px)`;
+}
+
+if(!G || !ST){ finishWithoutMotion('animation library did not load'); return; }
+G.registerPlugin(ST);
+if(own) ST.defaults({ scroller });
+if(window.CustomEase){ G.registerPlugin(CustomEase); CustomEase.create('settle','.2,.7,.1,1'); CustomEase.create('door','.7,0,.2,1'); }
+const EASE = { settle: window.CustomEase ? 'settle' : 'power3.out', door: window.CustomEase ? 'door' : 'power3.inOut' };
+const M = {
+  text:   { dur:1.0, rise:16, blur:8, stagger:0.09 },   // blur into focus
+  mask:   { dur:1.2, zoomDur:1.6, zoomFrom:1.12 },      // photos unmask upward
+  panel:  { dur:0.9, blur:10, stagger:0.06, at:'left 72%' },
+  stage:  { scrub:0.6, veil:0.55, headlineRise:90, endAt:0.82 },
+  curtain:{ drift:8 },                                  // yPercent either side
+  loader: { letter:0.18, words:1.5, grey:2.9, open:3.3, grow:3.9, full:5.0, done:5.7 }
+};
+
+/* ---- smooth scroll ----
+   Some hosts size the frame to the whole page, so the page itself never scrolls (its container does).
+   Lenis would then swallow the wheel and nothing would move, so everything scroll-driven is switched off there. */
+const canScroll = () => scMax() > 80 && innerHeight < Math.max(screen.height,900) * 1.25;
+if(!canScroll()){ finishWithoutMotion('this frame is as tall as the page, so it cannot scroll'); return; }
+if(!window.Lenis){ finishWithoutMotion('smooth-scroll library did not load'); return; }
+const lenis = new Lenis(Object.assign({ lerp:0.09, smoothWheel:true, wheelMultiplier:0.9 }, own ? { wrapper:scroller, content:$('#content') } : {}));
+lenis.on('scroll', ST.update);
+lenis.on('scroll', e => ruler(e.scroll, e.limit));
+G.ticker.add(t => lenis.raf(t*1000));
+G.ticker.lagSmoothing(0);
+// If the frame later grows to the full page height, drop back to plain scrolling and show everything.
+addEventListener('resize', ()=>{ if(!canScroll() && !window.__flat){ window.__flat=true; lenis.destroy(); ST.getAll().forEach(t=>t.kill()); G.killTweensOf('*');
+  G.set('[style*="blur"], .card .ph, .card .ph .img, .planwrap .drawing, .planwrap .view .ph, .stage .fx',{ clearProps:'all' });
+  G.utils.toArray(textSel).forEach(el=>G.set(el,{clearProps:'opacity,transform,filter'}));
+  finishWithoutMotion('frame grew to the full page height'); } });
+document.addEventListener('click', e=>{
+  const a=e.target.closest('a[href^="#"]'); if(!a) return;
+  const id=a.getAttribute('href'); const el=id.length>1 && document.querySelector(id); if(!el) return;
+  e.preventDefault(); lenis.scrollTo(el,{ duration:1.4, easing:t=>1-Math.pow(1-t,4) });
+});
+// The menu freezes the page behind it.
+new MutationObserver(()=> menu.classList.contains('open') ? lenis.stop() : lenis.start()).observe(menu,{attributes:true,attributeFilter:['class']});
+
+/* ---- header text flips light over dark sections ---- */
+let stageLen = () => stage.offsetHeight; // grows by the sideways travel while the stage is pinned
+const darkOn=new Set();
+document.querySelectorAll('[data-dark]').forEach(sec=>ST.create({
+  trigger:sec, start:'top 32px', refreshPriority:-1, // measured after the pinned stage adds its length
+  end: sec===stage ? ()=>'+='+stageLen() : 'bottom 32px',
+  onToggle:self=>{ self.isActive?darkOn.add(sec):darkOn.delete(sec); hdr.classList.toggle('on-dark',darkOn.size>0); }
+}));
+
+/* ---- stage: hero pinned, focus panels slide over it (desktop only) ---- */
+const mm = G.matchMedia();
+mm.add({ wide:'(min-width:900px)', narrow:'(max-width:899px)', calm:'(prefers-reduced-motion:reduce)' }, ctx=>{
+  const { wide, calm } = ctx.conditions;
+  const fx = panels.map(p=>p.querySelectorAll('.fx'));
+  if(!wide || calm){ stage.classList.add('flat'); G.set(fx.flat(),{clearProps:'all'}); return ()=>stage.classList.remove('flat'); }
+  stage.classList.remove('flat');
+  const cleanupProc = () => { $('#process').classList.remove('pinned'); G.set(cardsEl,{clearProps:'transform'}); goPhase = i => $('#pc'+i).scrollIntoView({block:'nearest'}); };
+  const dist = () => Math.max(0, track.scrollWidth - innerWidth*M.stage.endAt);
+  stageLen = () => innerHeight + dist();
+  const tl = G.timeline({ defaults:{ease:'none'}, scrollTrigger:{
+    trigger:stage, start:'top top', end:()=>'+='+dist(), pin:true, scrub:M.stage.scrub, invalidateOnRefresh:true, anticipatePin:1 }});
+  tl.to(track,{ x:()=>-dist(), duration:1 },0)
+    .fromTo(veil,{opacity:0},{ opacity:M.stage.veil, duration:0.4 },0)
+    .to(heroContent,{ y:-M.stage.headlineRise, duration:0.3 },0)
+    .to([heroPane,veil],{ opacity:0, duration:0.14 },0.82);
+  /* process: the section holds still while the cards slide in with the scroll */
+  const proc=$('#process'), procDist=()=>Math.max(0, cardsEl.scrollWidth - cardsEl.clientWidth);
+  proc.classList.add('pinned');
+  const ptl = G.to(cardsEl,{ x:()=>-procDist(), ease:'none', scrollTrigger:{
+    trigger:proc, start:'top 12%', end:()=>'+='+procDist(), pin:true, scrub:M.stage.scrub, invalidateOnRefresh:true,
+    onUpdate:self=>markPhase(Math.min(4, Math.round(self.progress*4))) }});
+  goPhase = i => { const st=ptl.scrollTrigger; lenis.scrollTo(st.start + (st.end-st.start)*(i/4), { duration:1.2 }); };
+  // Icons draw themselves in once their card's left edge passes 88% of the screen width.
+  const pcards=[...document.querySelectorAll('.pcard')];
+  pcards.forEach(c=>G.set(c.querySelectorAll('.ico [pathLength]:not(.hint)'),{ strokeDashoffset:1 }));
+  const drawIn = () => pcards.forEach(c=>{ if(c.dataset.drawn) return; if(c.getBoundingClientRect().left < innerWidth*0.88){ c.dataset.drawn=1;
+    G.to(c.querySelectorAll('.ico [pathLength]:not(.hint)'),{ strokeDashoffset:0, duration:1.4, stagger:0.12, ease:EASE.settle }); } });
+  ST.create({ trigger:proc, start:'top 85%', end:()=>'+='+(procDist()+innerHeight), onUpdate:drawIn, onToggle:drawIn });
+  panels.forEach((p,i)=>{
+    G.set(fx[i],{ opacity:0, filter:`blur(${M.panel.blur}px)` });
+    ST.create({ trigger:p, containerAnimation:tl, start:M.panel.at, once:true,
+      onEnter:()=>G.to(fx[i],{ opacity:1, filter:'blur(0px)', duration:M.panel.dur, stagger:M.panel.stagger, ease:EASE.settle }) });
+  });  return cleanupProc;
+});
+
+/* ---- text blurs into focus ---- */
+const calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+if(!calm){
+  /* ---- words fill in from light grey to their colour as you scroll (scrubbed, so it reverses going up) ---- */
+  document.documentElement.classList.add('motion');
+  const fillSel='.intro .statement, .intro .r4 p, .stmt .statement';
+  const splitWords = el => { const walk = node => [...node.childNodes].forEach(n=>{
+      if(n.nodeType===3){ const f=document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(w=>{ if(!w) return; if(/^\s+$/.test(w)) f.append(w); else { const sp=document.createElement('span'); sp.className='w'; sp.textContent=w; f.append(sp); } });
+        n.replaceWith(f); }
+      else if(n.nodeType===1) walk(n); });
+    walk(el); return [...el.querySelectorAll('.w')]; };
+  document.querySelectorAll(fillSel).forEach(el=>{
+    const all=splitWords(el), words=all.filter(w=>!w.closest('.hl')), final=words.map(w=>getComputedStyle(w).color);
+    G.set(all,{ color:'#e3e3e3' });
+    G.to(words,{ color:i=>final[i], ease:'none', stagger:0.1,
+      scrollTrigger:{ trigger:el, start:'top 90%', end:'bottom 30%', scrub:1.2 } }); // scrub 1.2 = trails the scroll by ~1.2 s
+    // Marked phrases: the bar sweeps across and their words turn white, a little after the sentence fills.
+    el.querySelectorAll('.hl').forEach(m=>{
+      G.timeline({ scrollTrigger:{ trigger:m, start:'top 82%', end:'top 28%', scrub:1.4 } })
+        .to(m,{ backgroundSize:'100% 88%', ease:'none' },0)
+        .to(m.querySelectorAll('.w'),{ color:'#fff', ease:'none', stagger:0.15 },0);
+    });
+  });
+  const texts = G.utils.toArray(textSel).filter(el=>!el.closest('.stage') && !el.matches(fillSel));
+  G.set(texts,{ opacity:0, y:M.text.rise, filter:`blur(${M.text.blur}px)` });
+  ST.batch(texts,{ start:'top 92%', once:true,
+    onEnter:b=>G.to(b,{ opacity:1, y:0, filter:'blur(0px)', duration:M.text.dur, stagger:M.text.stagger, ease:EASE.settle, overwrite:true }) });
+
+  /* ---- photos unmask upward while the image inside settles ---- */
+  G.utils.toArray('.card .ph, .planwrap .drawing, .planwrap .view .ph').forEach(el=>{
+    const img=el.querySelector('.img');
+    G.set(el,{ clipPath:'inset(100% 0% 0% 0%)' }); if(img) G.set(img,{ scale:M.mask.zoomFrom });
+    ST.create({ trigger:el, start:'top 90%', once:true, onEnter:()=>{
+      G.to(el,{ clipPath:'inset(0% 0% 0% 0%)', duration:M.mask.dur, ease:EASE.settle });
+      if(img) G.to(img,{ scale:1, duration:M.mask.zoomDur, ease:EASE.settle });
+    }});
+  });
+
+  /* ---- photo curtain drifts slower than the page ---- */
+  G.fromTo(cph,{ yPercent:-M.curtain.drift },{ yPercent:M.curtain.drift, ease:'none',
+    scrollTrigger:{ trigger:cur2, start:'top bottom', end:'bottom top', scrub:true } });
+}
+
+// Filtering changes the grid height, so positions below it are re-measured.
+const _setFilter = setFilter;
+setFilter = function(k,push){ _setFilter(k,push); setTimeout(()=>ST.refresh(), 360); };
+document.fonts && document.fonts.ready.then(()=>ST.refresh());
+addEventListener('load',()=>ST.refresh());
+
+/* ---- opening: S P A C E -> words -> window opens into the hero ---- */
+if(calm){ loader.classList.add('done'); heroPane.classList.add('in'); status('off (Reduce motion is turned on in your system settings)'); }
+else {
+  status('on'); lenis.stop(); if(own) scroller.scrollTop=0; else scrollTo(0,0);
+  const L = M.loader, rows=loader.querySelectorAll('.row'), rests=loader.querySelectorAll('.rest'), lw=loader.querySelector('.lw');
+  const w=Math.min(innerWidth*.26,240), h=Math.min(innerWidth*.38,340);
+  const iy=Math.max(0,(innerHeight-h)/2), ix=Math.max(0,(innerWidth-w)/2);
+  G.set(rows,{ opacity:0, y:8 }); G.set(loader.querySelector('.in'),{ opacity:0 });
+  // The window is animated edge by edge: a symmetric inset() collapses to two values in the browser,
+  // and tweening that string makes the box jump to a corner instead of growing from the centre.
+  const win={ y:iy, x:ix }, paintWin=()=>{ pin.style.clipPath=`inset(${win.y.toFixed(1)}px ${win.x.toFixed(1)}px ${win.y.toFixed(1)}px ${win.x.toFixed(1)}px)`; };
+  paintWin();
+  G.timeline({ defaults:{ ease:EASE.settle } })
+    .to(rows,{ opacity:1, y:0, duration:0.5, stagger:L.letter }, 0.3)
+    .to(rests,{ maxWidth:'6em', duration:0.8, ease:EASE.door }, L.words)
+    .to(loader.querySelector('.in'),{ opacity:1, duration:0.5 }, L.words)
+    .to(loader.querySelector('.in i'),{ width:48, duration:0.7, ease:EASE.door }, L.words)
+    .to(lw,{ color:'#6a6a6a', duration:0.6, ease:'none' }, L.grey)
+    .to(loader,{ backgroundColor:'rgba(17,17,17,0)', duration:0.5, ease:'none' }, L.open)
+    .to(lw,{ opacity:0, duration:0.4, ease:'none' }, L.open)
+    .to(win,{ y:14, x:14, duration:1.1, ease:EASE.door, onUpdate:paintWin }, L.grow)
+    .to(win,{ y:0, x:0, duration:0.6, onUpdate:paintWin }, L.full)
+    .add(()=>heroPane.classList.add('in'), L.full)
+    .add(()=>{ loader.classList.add('done'); pin.style.clipPath=''; lenis.start(); ST.refresh(); }, L.done)
+    .fromTo(pill,{ rotateY:0 },{ rotateY:360, transformPerspective:2400, duration:0.9, ease:EASE.door }, L.done);
+}
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Space-in Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Light-only, black and white to match the all-black logo. Same tokens as the homepage. */
+:root{
+  --white:#FFFFFF; --paper:#F4F4F4; --grey:#E7E7E7; --ink:#0A0A0A; --muted:#5A5A5A; --stone:#8E8E8E;
+  --hair:rgba(10,10,10,.12);
+  --settle:cubic-bezier(.2,.7,.1,1); --door:cubic-bezier(.7,0,.2,1);
+  --sans:"Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif","Times New Roman",Georgia,serif;
+  --m:max(24px,3.9vw); --gap:max(14px,1vw);
+  /* Hero measured from the reference: line at 43.5% of the height, square photo about 20% of the width. */
+  --fs-mega:min(19vw,31svh); --pic:min(20vw,34svh); --line:43.5%; --fs-xl:max(36px,4.66vw); --fs-l:max(30px,3.663vw); --fs-m:max(24px,2.264vw);
+  --fs-s:max(18px,1.4vw); --fs-body:max(16px,1.1vw); --fs-small:max(13px,.865vw); --fs-label:max(11.5px,.68vw); /* same √φ scale as the homepage */
+  color-scheme:light;
+}
+@media (max-width:640px){:root{--m:16px;--pic:46vw;--fs-mega:25vw}} /* phones: photo and line scaled up so the hero still reads */
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:var(--white);color:var(--ink);font:400 var(--fs-body)/1.6 var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+#scroller{height:100%;overflow-y:auto;overflow-x:hidden}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+h1,h2,h3,p{margin:0;font-weight:400}
+img{display:block;max-width:100%}
+.wrap{padding-inline:var(--m)}
+.label{font-size:var(--fs-label);line-height:1.3;color:var(--muted)}
+.ulink{background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .2s var(--settle);padding-bottom:2px}
+.ulink:hover,.ulink:focus-visible{background-size:100% 1px}
+.mark{display:inline-flex;align-items:center;gap:.28em;font-weight:600;letter-spacing:-.02em}
+.mark i{display:inline-block;width:1px;height:.9em;background:currentColor}
+.ph{position:relative;overflow:hidden;background:#2a2a2a}
+.ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--settle)}
+
+/* ---------- loader: photos flick through a small window while the count runs to 100 ---------- */
+.ld{position:fixed;inset:0;z-index:100;background:var(--ink);color:#fff;display:grid;place-items:center}
+.ld.done{display:none}
+.ld .win{position:absolute;left:50%;top:var(--line);width:var(--pic);aspect-ratio:1;overflow:hidden;transform:translate(-50%,-50%)} /* exactly where the hero photo will be */
+.ld .win img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
+.ld .win img.on{opacity:1}
+.ld .count{position:absolute;left:50%;bottom:max(28px,4vh);transform:translateX(-50%);font-size:var(--fs-small);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+
+/* ---------- header ---------- */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:50;pointer-events:none;background:rgba(255,255,255,.94)}
+.hdr .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-block:max(18px,1.6vw)}
+.hdr .wrap>*{pointer-events:auto}
+.hdr a.side{font-size:var(--fs-small)}
+.hdr a.side.r{justify-self:end}
+.pill{justify-self:center;background:var(--ink);color:#fff;border-radius:999px;padding:.6em 1.2em;font-size:max(15px,1.05vw)}
+.hdr.on-grey .pill{background:var(--ink)}
+
+/* ---------- stage: hero that zooms out into a card, with the sector cards above it ---------- */
+.stage{position:relative;height:100svh;overflow:hidden;background:var(--white)}
+.herocard{position:absolute;inset:0;background:var(--white);transform-origin:50% 100%;will-change:transform;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.marq{position:absolute;left:0;right:0;top:var(--line);height:calc(var(--fs-mega) * 1.2);transform:translateY(-50%);overflow:hidden}
+.marq .row{position:absolute;left:0;top:50%;display:flex;white-space:nowrap;will-change:transform;transform:translateY(-50%)}
+.marq .row span{font-size:var(--fs-mega);line-height:1.05;letter-spacing:-.055em;padding-right:.5em;font-weight:600;letter-spacing:-.05em;line-height:1;display:flex;align-items:center}
+.marq .row .gap{display:inline-block;width:calc(var(--pic) + .12em)} /* room for the photo between the two words */
+.centerpic{position:absolute;left:50%;top:var(--line);width:var(--pic);aspect-ratio:1;transform:translate(-50%,-50%);z-index:2}
+.herocopy{position:absolute;left:0;right:0;top:71%;text-align:center;display:grid;gap:max(12px,1.1vw);justify-items:center;padding-inline:var(--m)}
+.herocopy p{font-size:var(--fs-s);line-height:1.35;letter-spacing:-.01em;max-width:34ch}
+.tagbox{border:1px solid var(--ink);padding:.35em .9em;font-size:var(--fs-label);letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.herofoot{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:end;padding:0 var(--m) max(24px,2.2vw)}
+.herofoot .yr{font-size:var(--fs-small)}
+.sel{display:flex;gap:8px;align-items:center}
+.sel .btn{display:inline-flex;align-items:center;gap:.8em;border:1px solid var(--hair);background:var(--white);padding:.7em 1.1em;font-size:var(--fs-small)}
+.sel .btn:hover{border-color:var(--ink)}
+.sel .sq{width:max(42px,2.9vw);height:max(42px,2.9vw);background:var(--ink);color:#fff;display:grid;place-items:center}
+.dots{display:inline-grid;grid-template-columns:repeat(2,4px);gap:3px}
+.dots i{width:4px;height:4px;background:currentColor}
+.lines{display:grid;gap:4px}.lines i{display:block;width:16px;height:1.5px;background:currentColor}.lines i:last-child{width:10px}
+
+.cards{position:absolute;left:0;right:0;top:max(84px,8vh);height:54vh;display:flex;justify-content:center;gap:max(14px,1.4vw);padding-inline:var(--m);z-index:1}
+.scard{flex:0 1 max(180px,15.6vw);display:flex;flex-direction:column;color:#fff;position:relative;min-width:0}
+.scard .blk{flex:1 1 61.8%; /* φ split: block 61.8, photo 38.2 */background:var(--c);position:relative;padding:max(16px,1.3vw)}
+.scard .mark{font-size:max(15px,1.1vw)}
+.scard h2{position:absolute;right:max(14px,1.1vw);bottom:max(16px,1.3vw);writing-mode:vertical-rl;transform:rotate(180deg);font-size:max(28px,2.6vw);letter-spacing:-.035em;line-height:1;font-weight:500;white-space:nowrap}
+.scard .desc{position:absolute;left:max(16px,1.3vw);bottom:max(16px,1.3vw);font-size:var(--fs-label);line-height:1.35;max-width:14ch;opacity:.85}
+.scard .num{position:absolute;right:max(16px,1.3vw);top:max(16px,1.3vw);font-size:var(--fs-label);opacity:.7;font-variant-numeric:tabular-nums}
+.scard .ph{flex:0 0 38.2%}
+.scard:hover .ph img{transform:scale(1.06)}
+.scard:hover h2{transform:rotate(180deg) translateY(6px)}
+.scard h2{transition:transform .6s var(--settle)}
+
+/* Not pinned (phones, reduced motion): everything is laid out in normal flow. */
+.stage.flat{height:auto;overflow:visible;background:var(--grey);display:flex;flex-direction:column}
+.stage.flat .cards{order:2}
+.stage.flat .herocard{position:relative;height:100svh;min-height:560px}
+.stage.flat .cards{position:relative;top:auto;height:auto;flex-wrap:wrap;padding-block:48px}
+.stage.flat .scard{flex:1 1 calc(50% - 14px);height:auto;aspect-ratio:1/1.618}
+.stage.flat .scard h2{font-size:max(26px,7vw)}
+@media (min-width:900px){.stage.flat .scard{flex:1 1 0;height:60vh}}
+
+/* ---------- project list ---------- */
+.list{padding-block:max(96px,8vw)}
+.lhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:24px;border-bottom:1px solid var(--hair);padding-bottom:max(18px,1.4vw);margin-bottom:max(28px,2.4vw)}
+.lhead h2{font-size:var(--fs-xl);letter-spacing:-.038em;line-height:1}
+.lhead h2 sup{font-size:.28em;letter-spacing:0;vertical-align:top;margin-left:.2em;font-variant-numeric:tabular-nums}
+.ctrls{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center}
+.filters{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.filters button{border:1px solid var(--hair);border-radius:999px;padding:.5em 1em;font-size:var(--fs-small);white-space:nowrap}
+.filters button sup{font-size:.7em;margin-left:2px}
+.filters button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.view{display:flex;gap:10px;font-size:var(--fs-small);color:var(--stone)}
+.view button[aria-pressed="true"]{color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:max(20px,1.6vw) var(--gap);transition:opacity .3s}
+.grid.fading{opacity:0}
+.pc{display:grid;gap:10px;align-content:start}
+.pc .ph{aspect-ratio:var(--ar,4/3)}
+.pc:hover .ph img{transform:scale(1.04)}
+.pc .meta{display:flex;justify-content:space-between;gap:12px;font-size:var(--fs-small)}
+.pc .meta span{color:var(--muted)}
+.pc .facts{font-size:var(--fs-label);color:var(--stone)}
+.pc[hidden],.lrow[hidden]{display:none}
+.a1{grid-column:1/span 7;--ar:1.618/1}.a2{grid-column:8/span 5;--ar:4/5}
+.a3{grid-column:1/span 4;--ar:4/5}.a4{grid-column:5/span 8;--ar:16/9}
+.a5{grid-column:2/span 5;--ar:4/5}.a6{grid-column:7/span 6;--ar:1/1}
+/* Photo shapes come from one list only: 1:1, 4:5, φ:1, 16:9. */
+.grid.filtered .pc{grid-column:span 4;--ar:1.618/1}
+@media (max-width:900px){.grid .pc,.grid.filtered .pc{grid-column:1/-1;--ar:1.618/1}}
+.rows{display:none}
+.list.as-list .grid{display:none}.list.as-list .rows{display:block}
+.lrow{display:grid;grid-template-columns:2.4fr 1fr 1fr .6fr .8fr auto;gap:20px;align-items:center;padding:max(18px,1.4vw) 0;border-bottom:1px solid var(--hair);font-size:var(--fs-small)}
+.lrow .n{font-size:var(--fs-s);letter-spacing:-.015em}
+.lrow span{color:var(--muted)}
+.lrow .arr{width:max(30px,2.1vw);height:max(30px,2.1vw);border:1px solid currentColor;border-radius:50%;display:grid;place-items:center;transition:background .2s,color .2s}
+.lrow:hover .arr{background:var(--ink);color:#fff}
+@media (max-width:700px){.lrow{grid-template-columns:1fr auto}.lrow>span{display:none}}
+.peek{position:fixed;left:0;top:0;width:max(200px,15vw);aspect-ratio:4/5;pointer-events:none;z-index:40;opacity:0;transition:opacity .25s}
+.peek.show{opacity:1}
+.peek img{width:100%;height:100%;object-fit:cover}
+
+/* ---------- closing band ---------- */
+.close{background:var(--ink);color:#fff;padding-block:max(80px,7vw) max(28px,2vw)}
+.close .big{font-size:var(--fs-xl);letter-spacing:-.038em;line-height:1.02;display:inline-block}
+.close .row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-top:max(56px,5vw);font-size:var(--fs-small);color:rgba(255,255,255,.7)}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.2s!important}.ld{display:none}}
+</style>
+</head>
+<body>
+
+<div class="ld" id="ld" aria-hidden="true">
+  <div class="win" id="ldwin"></div>
+  <div class="count" id="ldcount">0</div>
+</div>
+
+<header class="hdr" id="hdr">
+  <div class="wrap">
+    <a class="side ulink" href="index.html">← Home</a>
+    <a class="pill mark" href="index.html" aria-label="Space-in home">Space<i></i>in</a>
+    <a class="side r ulink" href="index.html#talk">Let's talk</a>
+  </div>
+</header>
+
+<div id="scroller"><div id="content">
+
+<section class="stage" id="stage">
+  <div class="cards" id="cards"></div>
+  <div class="herocard" id="herocard">
+    <div class="marq" aria-label="Space in">
+      <div class="row" id="marqRow" aria-hidden="true"></div>
+    </div>
+    <div class="centerpic ph"><img src="photos/hero.jpg" alt="Courtyard House at dusk"></div>
+    <div class="herocopy">
+      <p>Homes, workplaces and places to gather,<br>drawn and built across Madhya Pradesh.</p>
+      <span class="tagbox" id="tagbox">Projects · 2019 to 2026</span>
+    </div>
+    <div class="herofoot">
+      <span class="yr">Space-in® 2026 · Indore</span>
+      <div class="sel">
+        <button class="btn" id="toSel">Our selection <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+        <button class="sq" id="toList" aria-label="Jump to the full project list"><span class="lines" aria-hidden="true"><i></i><i></i></span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="list wrap" id="list">
+  <div class="lhead">
+    <h2>All projects<sup id="total"></sup></h2>
+    <div class="ctrls">
+      <div class="filters" id="filters" role="toolbar" aria-label="Filter projects"></div>
+      <div class="view" role="group" aria-label="Layout">
+        <button id="vGrid" aria-pressed="true">Grid</button><span>/</span><button id="vList" aria-pressed="false">List</button>
+      </div>
+    </div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="rows" id="rows"></div>
+</section>
+
+<footer class="close">
+  <div class="wrap">
+    <a class="big ulink" href="index.html#talk">Planning a space worth living in? Let's talk →</a>
+    <div class="row"><span>Space-in® 2026 · Architecture + Interiors · Indore, Madhya Pradesh</span><a class="ulink" href="index.html">Back to home</a></div>
+  </div>
+</footer>
+
+</div></div>
+<div class="peek" id="peek" aria-hidden="true"><img alt=""></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+
+/* ---- data (sample projects until the studio's own arrive; photos live in photos/<file>.jpg) ---- */
+const sectors = [
+  {k:'residential', n:'Residential', c:'#0A0A0A', d:'Houses, villas and farmhouses', ph:'focus-residential'},
+  {k:'interiors', n:'Interiors', c:'#1C1C1C', d:'Plaster, timber and stone rooms', ph:'focus-interiors'},
+  {k:'workplace', n:'Workplace', c:'#2C2C2C', d:'Studios and headquarters', ph:'focus-workplace'},
+  {k:'hospitality', n:'Hospitality', c:'#3C3C3C', d:'Cafés, stays and clubs', ph:'focus-hospitality'},
+  {k:'institutional', n:'Institutional', c:'#141414', d:'Schools and libraries', ph:'focus-institutional'},
+];
+const projects = [
+  {n:'Courtyard House', city:'Indore', s:'residential', y:2025, a:'312 m²', ph:'courtyard-house'},
+  {n:'Stepwell Library', city:'Ujjain', s:'institutional', y:2026, a:'1,850 m²', ph:'stepwell-library'},
+  {n:'Palasia Studio Offices', city:'Indore', s:'workplace', y:2026, a:'2,400 m²', ph:'palasia-studio-offices'},
+  {n:'Lime Plaster Apartment', city:'Bhopal', s:'interiors', y:2024, a:'180 m²', ph:'lime-plaster-apartment'},
+  {n:'Kund Café', city:'Indore', s:'hospitality', y:2023, a:'240 m²', ph:'kund-cafe'},
+  {n:'Brick Villa', city:'Maheshwar', s:'residential', y:2022, a:'420 m²', ph:'brick-villa'},
+  {n:'School Pavilion', city:'Dewas', s:'institutional', y:2024, a:'960 m²', ph:'school-pavilion'},
+  {n:'Terrace Residence', city:'Bhopal', s:'residential', y:2021, a:'350 m²', ph:'terrace-residence'},
+  {n:'Vijay Nagar Apartment', city:'Indore', s:'interiors', y:2025, a:'150 m²', ph:'room-living'},
+  {n:'Rajwada Dining Room', city:'Indore', s:'hospitality', y:2019, a:'130 m²', ph:'room-dining'},
+];
+const sectorName = k => sectors.find(s=>s.k===k).n;
+
+/* ---- sector cards ---- */
+$('#cards').innerHTML = sectors.map((s,i)=>{
+  const n = projects.filter(p=>p.s===s.k).length;
+  return `<a class="scard" href="#list" data-f="${s.k}" style="--c:${s.c}">
+    <div class="blk"><span class="mark">Space<i></i>in</span><span class="num">(0${i+1})</span>
+      <p class="desc">${s.d}<br>${n} project${n>1?'s':''}</p><h2>${s.n}</h2></div>
+    <div class="ph"><img src="photos/${s.ph}.jpg" alt="" loading="eager"></div></a>`;
+}).join('');
+
+/* ---- marquee text ---- */
+const phrase = 'Space in';
+// Five copies; the middle one ends centred with the photo between its two words.
+$('#marqRow').innerHTML = Array.from({length:5},()=>`<span>Space<i class="gap"></i>in</span>`).join('');
+
+/* ---- grid, list and filters ---- */
+const layout=['a1','a2','a3','a4','a5','a6'];
+$('#grid').innerHTML = projects.map((p,i)=>`
+  <a class="pc ${layout[i%6]}" href="#list" data-s="${p.s}">
+    <div class="ph"><img src="photos/${p.ph}.jpg" alt="${p.n}, ${p.city}" loading="lazy" decoding="async"></div>
+    <div class="meta">${p.n}<span>${p.city}</span></div>
+    <div class="facts">${sectorName(p.s)} · ${p.y} · ${p.a}</div>
+  </a>`).join('');
+$('#rows').innerHTML = projects.map(p=>`
+  <a class="lrow" href="#list" data-s="${p.s}" data-ph="${p.ph}">
+    <b class="n" style="font-weight:400">${p.n}</b><span>${sectorName(p.s)}</span><span>${p.city}</span><span>${p.y}</span><span>${p.a}</span><i class="arr" aria-hidden="true">→</i>
+  </a>`).join('');
+const counts={all:projects.length}; projects.forEach(p=>counts[p.s]=(counts[p.s]||0)+1);
+$('#total').textContent = projects.length;
+$('#filters').innerHTML = [['all','All'],...sectors.map(s=>[s.k,s.n])].map(([k,n])=>`<button data-k="${k}" aria-pressed="${k==='all'}">${n}<sup>${counts[k]||0}</sup></button>`).join('');
+let refresh = ()=>{};
+function setFilter(k){
+  if(!counts[k]) k='all';
+  const g=$('#grid'); g.classList.add('fading');
+  setTimeout(()=>{
+    document.querySelectorAll('.pc,.lrow').forEach(el=>el.hidden = k!=='all' && el.dataset.s!==k);
+    g.classList.toggle('filtered', k!=='all'); g.classList.remove('fading'); refresh();
+  },300);
+  document.querySelectorAll('#filters button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===k));
+}
+$('#filters').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) setFilter(b.dataset.k); });
+// Links from a Focus page arrive as projects.html#residential and open pre-filtered.
+const h0=location.hash.slice(1); if(counts[h0] && h0!=='all') setFilter(h0);
+function setView(list){ $('#list').classList.toggle('as-list',list); $('#vGrid').setAttribute('aria-pressed',!list); $('#vList').setAttribute('aria-pressed',list); refresh(); }
+$('#vGrid').onclick=()=>setView(false); $('#vList').onclick=()=>setView(true);
+
+/* photo follows the cursor over list rows */
+const peek=$('#peek'), peekImg=peek.querySelector('img');
+if(matchMedia('(hover:hover)').matches){
+  document.querySelectorAll('.lrow').forEach(r=>{
+    r.addEventListener('mouseenter',e=>{ peekImg.src=`photos/${r.dataset.ph}.jpg`; peek.style.transform=`translate(${e.clientX+24}px,${e.clientY-120}px)`; peek.classList.add('show'); });
+    r.addEventListener('mousemove',e=>{ peek.style.transform=`translate(${e.clientX+24}px,${e.clientY-120}px)`; });
+    r.addEventListener('mouseleave',()=>peek.classList.remove('show'));
+  });
+}
+
+/* =====================================================================
+   Motion: Lenis + GSAP ScrollTrigger, same engine and timings as the homepage.
+   ===================================================================== */
+const G=window.gsap, ST=window.ScrollTrigger, scroller=$('#scroller'), ld=$('#ld'), stage=$('#stage'), herocard=$('#herocard');
+const calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const jump = el => el.scrollIntoView({block:'start'});
+document.querySelectorAll('.scard').forEach(c=>c.addEventListener('click',e=>{ e.preventDefault(); setFilter(c.dataset.f); go($('#list')); }));
+let go = jump;
+$('#toList').onclick=()=>go($('#list'));
+
+function flat(){ stage.classList.add('flat'); ld.classList.add('done'); $('#toSel').onclick=()=>jump($('#cards')); }
+if(!G || !ST || !window.Lenis || calm){ flat(); return; }
+G.registerPlugin(ST); ST.defaults({ scroller });
+if(window.CustomEase){ G.registerPlugin(CustomEase); CustomEase.create('settle','.2,.7,.1,1'); CustomEase.create('door','.7,0,.2,1'); }
+const EASE={ settle: window.CustomEase?'settle':'power3.out', door: window.CustomEase?'door':'power3.inOut' };
+
+const lenis = new Lenis({ wrapper:scroller, content:$('#content'), lerp:0.09, smoothWheel:true, wheelMultiplier:0.9 });
+lenis.on('scroll', ST.update);
+G.ticker.add(t=>lenis.raf(t*1000)); G.ticker.lagSmoothing(0);
+go = el => lenis.scrollTo(el,{ duration:1.4 });
+refresh = () => setTimeout(()=>ST.refresh(), 50);
+
+/* hero line: slides in from the left, slows down and comes to rest with the photo between "Space" and "in" */
+const row=$('#marqRow'), mid=row.children[2];
+const gap = mid.querySelector('.gap');
+const restX = () => innerWidth/2 - (mid.offsetLeft + gap.offsetLeft + gap.offsetWidth/2);
+// It keeps flowing to the right; moving exactly one copy per cycle makes the loop seamless.
+const copyW = () => row.children[1].offsetLeft - row.children[0].offsetLeft;
+let loop;
+function makeLoop(){ const p = loop ? loop.progress() : 0, ts = loop ? loop.timeScale() : 1, paused = loop ? loop.paused() : true;
+  if(loop) loop.kill(); const a=restX(), w=copyW();
+  loop = G.fromTo(row,{ x:a-w },{ x:a, duration:9, ease:'none', repeat:-1, paused }).progress(p).timeScale(ts); }
+makeLoop();
+addEventListener('resize', makeLoop);
+document.fonts && document.fonts.ready.then(makeLoop);
+// Scrolling speeds it up; it eases back to its steady drift when the scroll stops.
+lenis.on('scroll', e=>{ G.to(loop,{ timeScale:1+Math.min(4,Math.abs(e.velocity)/6), duration:0.25, overwrite:true,
+  onComplete:()=>G.to(loop,{ timeScale:1, duration:1.4, ease:'power2.out' }) }); });
+
+/* zoom-out: the hero shrinks into a card at the bottom and the sector cards drop in above it */
+const mm=G.matchMedia();
+mm.add({ wide:'(min-width:900px)', narrow:'(max-width:899px)' }, ctx=>{ // object form only fires when a condition matches, so both are listed
+  const cards=[...document.querySelectorAll('.scard')];
+  if(!ctx.conditions.wide){ stage.classList.add('flat'); $('#toSel').onclick=()=>go($('#cards')); return ()=>stage.classList.remove('flat'); }
+  stage.classList.remove('flat');
+  G.set(cards,{ yPercent:-18, opacity:0 });
+  const tl=G.timeline({ defaults:{ ease:'none' }, scrollTrigger:{ trigger:stage, start:'top top', end:'+=120%', pin:true, scrub:0.6, invalidateOnRefresh:true } });
+  tl.to(stage,{ backgroundColor:'#E7E7E7', duration:0.3 },0)
+    .to(herocard,{ scale:0.42, y:()=>innerHeight*0.1, duration:0.7, ease:'power1.inOut' },0)
+    .to(cards,{ yPercent:0, opacity:1, duration:0.45, stagger:0.07, ease:'power2.out' },0.25);
+  $('#toSel').onclick=()=>lenis.scrollTo(tl.scrollTrigger.end,{ duration:1.6 });
+  herocard.addEventListener('click',e=>{ if(tl.progress()>0.5 && !e.target.closest('button')) lenis.scrollTo(0,{ duration:1.4 }); });
+  return ()=>G.set(cards,{ clearProps:'all' });
+});
+
+/* project cards: photos unmask upward, captions blur into focus */
+G.utils.toArray('.pc').forEach(pc=>{
+  const ph=pc.querySelector('.ph'), img=ph.querySelector('img'), txt=pc.querySelectorAll('.meta,.facts');
+  G.set(ph,{ clipPath:'inset(100% 0% 0% 0%)' }); G.set(img,{ scale:1.12 }); G.set(txt,{ opacity:0, y:12, filter:'blur(8px)' });
+  ST.create({ trigger:pc, start:'top 90%', once:true, onEnter:()=>{
+    G.to(ph,{ clipPath:'inset(0% 0% 0% 0%)', duration:1.2, ease:EASE.settle });
+    G.to(img,{ scale:1, duration:1.6, ease:EASE.settle });
+    G.to(txt,{ opacity:1, y:0, filter:'blur(0px)', duration:1, stagger:0.09, delay:0.2, ease:EASE.settle });
+  }});
+});
+ST.batch('.lrow',{ start:'top 95%', onEnter:b=>G.fromTo(b,{opacity:0,y:14},{opacity:1,y:0,duration:0.8,stagger:0.06,ease:EASE.settle}) });
+
+/* ---- loader: photos flick through the window, count runs to 100, then the window becomes the hero photo ---- */
+const pics=['hero','courtyard-house','kund-cafe','brick-villa','stepwell-library','lime-plaster-apartment','terrace-residence','hero'];
+$('#ldwin').innerHTML = pics.map((p,i)=>`<img src="photos/${p}.jpg" alt=""${i===0?' class="on"':''}>`).join('');
+const frames=[...document.querySelectorAll('#ldwin img')], count={v:0};
+lenis.stop(); scroller.scrollTop=0;
+G.set('.marq .row span, .herocopy > *, .herofoot > *',{ opacity:0, y:30 });
+G.timeline()
+  .to(count,{ v:100, duration:2.2, ease:'power2.inOut', onUpdate:()=>{
+      $('#ldcount').textContent=Math.round(count.v);
+      const f=Math.min(frames.length-1, Math.floor(count.v/100*frames.length));
+      frames.forEach((im,i)=>im.classList.toggle('on',i===f)); } })
+  .to('#ldcount',{ opacity:0, duration:0.3 },2.3)
+  .to(ld,{ backgroundColor:'rgba(10,10,10,0)', duration:0.6, ease:'none' },2.4)
+  .add(()=>{ ld.classList.add('done'); lenis.start(); ST.refresh(); },3.0)
+  .to('.marq .row span',{ opacity:1, y:0, duration:0.8, ease:EASE.settle },2.4)
+  .add(()=>{ loop.timeScale(7).play(); G.to(loop,{ timeScale:1, duration:3.4, ease:'power3.out' }); },2.4) // comes in fast, settles into a slow drift
+  .to('.herocopy > *, .herofoot > *',{ opacity:1, y:0, duration:0.9, stagger:0.08, ease:EASE.settle },2.8);
+addEventListener('load',()=>ST.refresh());
+})();
+</script>
+</body>
+</html>
