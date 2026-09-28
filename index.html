@@ -3,7 +3,7 @@
 <title>Space-in Homepage</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=Courier+Prime&family=Homemade+Apple&display=swap">
 <style>
 /* Light-only, black and white by design. Colours are set explicitly. */
 :root{
@@ -67,13 +67,21 @@ section{scroll-margin-top:80px}
 .ph-tag{position:absolute;left:12px;bottom:10px;font-size:var(--fs-label);color:rgba(255,255,255,.8);z-index:1}
 
 /* ---------- loader: S P A C E grows into words, then "in" (after LPAS) ---------- */
-.loader{position:fixed;inset:0;z-index:100;background:var(--charcoal);color:var(--plaster);display:grid;place-items:center}
+.loader{position:fixed;inset:0;z-index:100;background:var(--plaster);color:var(--ink);overflow:hidden}
 .loader.done{display:none}
-.lw{display:grid;gap:2px;font-size:var(--fs-m);line-height:1.08;letter-spacing:var(--tr-m);font-weight:400}
-.lw .row{display:flex}
-.lw .rest{display:inline-block;max-width:0;overflow:hidden;white-space:nowrap;vertical-align:bottom}
-.lw .in{margin-top:14px;display:flex;align-items:center;gap:12px}
-.lw .in i{display:block;width:0;height:1px;background:#FFFFFF}
+.ldword{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;justify-content:center;align-items:center;font-size:min(16vw,30svh);font-weight:400;letter-spacing:-.03em;line-height:.8}
+.ldword .l{position:relative;display:inline-block}
+.ldword .l b{display:inline-block;font-weight:inherit}
+.ldword .l i{position:absolute;left:50%;top:4%;bottom:4%;width:1px;background:var(--ink)}
+.ldword .gap{display:inline-block;width:.32em}
+.ldpic{position:absolute;overflow:hidden;z-index:2}
+.ldpic img{width:100%;height:100%;object-fit:cover;display:block}
+/* collage positions (desktop), from the reference: one above right, one below left, two small accents */
+.ldpic.p1{left:57%;top:9%;width:22vw;aspect-ratio:4/3}
+.ldpic.p2{left:9%;top:60%;width:18vw;aspect-ratio:3/2}
+.ldpic.p3{left:17%;top:5%;width:10vw;aspect-ratio:4/3}
+.ldpic.p4{left:63%;top:70%;width:11vw;aspect-ratio:4/5}
+@media (max-width:640px){.ldpic.p1{left:44%;top:14%;width:48vw}.ldpic.p2{left:6%;top:60%;width:44vw}.ldpic.p3{left:8%;top:17%;width:26vw}.ldpic.p4{left:62%;top:64%;width:30vw}}
 .hero .content{will-change:transform}
 
 /* ---------- header ---------- */
@@ -281,6 +289,22 @@ section{scroll-margin-top:80px}
 .stmt .statement{max-width:18ch}
 .stmt .serif{font-style:italic;color:var(--muted)}
 
+/* ---------- note from the studio ---------- */
+.notesec{display:grid;grid-template-columns:repeat(12,1fr);column-gap:max(24px,3.4vw);align-items:center;padding-bottom:var(--section)}
+.note-card{grid-column:2/span 4;position:relative;background:#F2F1ED;padding:max(26px,2.2vw) max(26px,2.2vw) max(22px,1.8vw);aspect-ratio:1/1.09;display:grid;grid-template-rows:auto 1fr auto;box-shadow:0 1px 2px rgba(0,0,0,.06),0 24px 48px -28px rgba(0,0,0,.35);transform:rotate(-1.5deg);transform-origin:30% 0}
+.note-card .clip{position:absolute;left:12%;top:-9%;width:max(26px,2.2vw);height:auto;overflow:visible}
+.note-card .clip path{fill:none;stroke:#8C8C8C;stroke-width:2.2;stroke-linecap:round}
+.mono{font-family:"Courier Prime","Courier New",monospace;font-size:max(12px,.95vw);letter-spacing:.02em;line-height:1.25;color:#2A2A2A}
+.nhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.nlogo{display:inline-flex;align-items:center;gap:.2em;font-size:max(16px,1.25vw);font-weight:500;letter-spacing:-.04em}
+.nlogo i{display:inline-block;width:1px;height:.8em;background:currentColor}
+.nlines{align-self:center;display:grid}
+.nlines .hand,.nlines span{height:max(34px,2.9vw);border-bottom:1px solid #9A9A9A}
+.nlines .hand{margin:0;font-family:"Homemade Apple","Bradley Hand",cursive;font-size:max(15px,1.2vw);line-height:max(34px,2.9vw);white-space:nowrap;color:#141414}
+.nfoot{display:flex;justify-content:space-between;gap:8px}
+.notepic{grid-column:7/-1;aspect-ratio:3/2}
+@media (max-width:900px){.notesec{grid-template-columns:1fr;row-gap:56px}.note-card{grid-column:1/-1;width:86%;justify-self:center}.notepic{grid-column:1/-1}}
+
 /* ---------- journal ---------- */
 .journal{padding-bottom:var(--section)}
 .jrow{display:grid;grid-template-columns:160px 1fr auto auto;gap:24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--hair);transition:background .2s}
@@ -394,6 +418,29 @@ section{scroll-margin-top:80px}
   .statement.big{font-size:40px}
   .featured{min-height:560px;height:88svh}
 }
+
+/* ---------- header (Storey layout): logo left, three links centred, Contact on the right ---------- */
+.hdr .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-block:max(14px,1.2vw)}
+.hdr .logo{justify-self:start;display:inline-flex;align-items:center;gap:.2em;font-size:max(22px,1.75vw);font-weight:500;letter-spacing:-.045em;line-height:1;color:inherit;pointer-events:auto}
+.hdr .logo .bar{display:inline-block;width:1.5px;height:.78em;background:currentColor}
+.mainnav{display:flex;gap:max(18px,1.4vw);font-size:max(15px,1.1vw);pointer-events:auto}
+.hright{justify-self:end;display:flex;gap:8px;align-items:center;pointer-events:auto}
+.cta{display:inline-flex;align-items:center;gap:max(28px,2.6vw);background:#0A0A0A;color:#fff;padding:.78em .85em .78em 1.1em;font-size:max(15px,1.1vw);line-height:1;transition:background .4s,color .4s}
+.cta .dots{width:1.35em;height:1.35em;fill:currentColor;transition:transform 1.2s cubic-bezier(.2,.7,.1,1)}
+.cta:hover .dots{transform:rotate(180deg)}
+.mbtn{display:none;align-items:center;border:1px solid currentColor;padding:.72em .95em;font:inherit;font-size:14px;line-height:1;color:inherit;background:none;cursor:pointer}
+.hdr.on-dark,.hdr.dark{color:#fff}
+.hdr.on-dark .cta,.hdr.dark .cta{background:#fff;color:#0A0A0A}
+@media (max-width:760px){.mainnav{display:none}.mbtn{display:inline-flex}.hdr .wrap{grid-template-columns:1fr auto}.cta{gap:12px;font-size:14px;padding:.72em .8em .72em 1em}.hdr .logo{font-size:22px}}
+/* phone menu: the same three links */
+.mmenu{position:fixed;inset:0;z-index:70;background:#0A0A0A;color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:max(16px,3.9vw);clip-path:inset(0 0 100% 0);transition:clip-path .7s cubic-bezier(.7,0,.2,1);visibility:hidden}
+.mmenu.open{clip-path:inset(0 0 0 0);visibility:visible}
+.mmenu .row{display:flex;justify-content:space-between;align-items:center}
+.mmenu nav{display:grid;gap:4px}
+.mmenu nav a{font-size:max(44px,5vw);letter-spacing:-.045em;line-height:1.05}
+.mmenu .x{border:1px solid #fff;color:#fff;background:none;font:inherit;font-size:14px;padding:.72em .95em;cursor:pointer}
+.mmenu .meta{font-size:13px;color:rgba(255,255,255,.65);display:grid;gap:4px}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.2s!important;transition-delay:0s!important;animation:none!important}
   .hero .shot .img,.slide .img{transform:none!important}
@@ -402,44 +449,27 @@ section{scroll-margin-top:80px}
 }
 </style>
 
-<!-- Loader (wow 1): letters of the name open into the studio's process -->
+<!-- Loader (after the "Elite" reference): hairlines thicken into the letters, photos gather round, one becomes the hero -->
 <div class="loader" id="loader" aria-hidden="true">
-  <div class="lw">
-    <span class="row"><b>S</b><span class="rest">ite</span></span>
-    <span class="row"><b>P</b><span class="rest">lan</span></span>
-    <span class="row"><b>A</b><span class="rest">rrange</span></span>
-    <span class="row"><b>C</b><span class="rest">raft</span></span>
-    <span class="row"><b>E</b><span class="rest">nter</span></span>
-    <span class="in"><i></i>in<span class="rest">habit</span></span>
-  </div>
+  <div class="ldword" id="ldword"><span class="l"><b>S</b><i></i></span><span class="l"><b>P</b><i></i></span><span class="l"><b>A</b><i></i></span><span class="l"><b>C</b><i></i></span><span class="l"><b>E</b><i></i></span><span class="gap"></span><span class="l"><b>I</b><i></i></span><span class="l"><b>N</b><i></i></span></div>
+  <div class="ldpic p1" id="ldHero"><img src="photos/hero.jpg" alt=""></div>
+  <div class="ldpic p2"><img src="photos/featured-1.jpg" alt=""></div>
+  <div class="ldpic p3"><img src="photos/room-court.jpg" alt=""></div>
+  <div class="ldpic p4"><img src="photos/room-study.jpg" alt=""></div>
 </div>
 
 <!-- Header -->
 <header class="hdr on-dark" id="hdr">
   <div class="wrap">
-    <div class="clock" aria-label="Studio time in Indore"><span id="clk">(00)(00)</span> IST · Indore</div>
-    <button class="pill" id="menuBtn" aria-expanded="false" aria-controls="menu">Space<span class="bar"></span>in <span class="mn">Menu</span></button>
-    <a class="talk" href="#talk"><span class="t">Let's talk</span><span class="arrowc">→</span></a>
+    <a class="logo" href="#hero" aria-label="Space-in home">Space<span class="bar"></span>in</a>
+    <nav class="mainnav" aria-label="Main"><a class="ulink" href="projects.html">Projects</a><a class="ulink" href="#intro">Studio</a><a class="ulink" href="#journal">Journal</a></nav>
+    <div class="hright"><a class="cta" href="#talk">Contact <svg class="dots" viewBox="0 0 24 24" aria-hidden="true"><circle cx="21.00" cy="12.00" r="1.10"/><circle cx="18.36" cy="18.36" r="1.32"/><circle cx="12.00" cy="21.00" r="1.54"/><circle cx="5.64" cy="18.36" r="1.76"/><circle cx="3.00" cy="12.00" r="1.98"/><circle cx="5.64" cy="5.64" r="2.20"/><circle cx="12.00" cy="3.00" r="2.42"/><circle cx="18.36" cy="5.64" r="2.64"/></svg></a><button class="mbtn" id="mBtn" aria-expanded="false" aria-controls="mmenu">Menu</button></div>
   </div>
 </header>
-
-<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
-  <div class="wrap">
-    <div class="top">
-      <div class="clock" style="color:var(--plaster)">Architecture + Interiors</div>
-      <button class="pill" id="menuClose">Space<span class="bar"></span>in <span class="mn">Close</span></button>
-      <span></span>
-    </div>
-    <nav>
-      <a href="projects.html"><small class="chip">(01)</small>Projects</a>
-      <a href="focus.html"><small class="chip">(02)</small>Focus</a>
-      <a href="#process"><small class="chip">(03)</small>Approach</a>
-      <a href="#intro"><small class="chip">(04)</small>Studio</a>
-      <a href="#journal"><small class="chip">(05)</small>Journal</a>
-      <a href="#talk"><small class="chip">(06)</small>Contact</a>
-    </nav>
-    <div class="meta"><span>studio@space-in.example</span><span>+91 731 000 0000</span><span>Mon to Sat, 10:00 to 19:00</span><span>Instagram · LinkedIn</span></div>
-  </div>
+<div class="mmenu" id="mmenu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="row"><span class="logo" style="font-size:22px;font-weight:500;letter-spacing:-.045em">Space | in</span><button class="x" id="mClose">Close</button></div>
+  <nav><a href="projects.html">Projects</a><a href="#intro">Studio</a><a href="#journal">Journal</a><a href="#talk">Contact</a></nav>
+  <div class="meta"><span>studio@space-in.example</span><span>+91 731 000 0000 · Indore</span></div>
 </div>
 
 <div id="scroller"><div id="content">
@@ -532,6 +562,20 @@ section{scroll-margin-top:80px}
   <p class="statement big rv">A good room is the one you <mark class="hl">stop noticing.</mark></p>
   <p class="serif rv">It just feels like the right place to be.</p>
 </div></section>
+
+<!-- A note from the studio (after the Storey reference): a clipped paper note beside a large photo -->
+<section class="notesec wrap" id="note">
+  <div class="note-card" id="noteCard">
+    <svg class="clip" viewBox="0 0 40 110" aria-hidden="true"><path d="M26 96V20a9 9 0 0 0-18 0v70a13 13 0 0 0 26 0V28"/></svg>
+    <div class="nhead"><span class="mono">A NOTE FROM<br>SPACE-IN</span><span class="nlogo">Space<i></i>in</span></div>
+    <div class="nlines">
+      <p class="hand" id="noteHand">Light, let in. Life, lived in.</p>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="nfoot mono"><span>SI / IDR</span><span>THANK YOU</span><span>SPACE-IN.STUDIO</span></div>
+  </div>
+  <div class="ph notepic"><div class="img" data-room="p-Terrace Residence"></div></div>
+</section>
 
 <!-- Journal -->
 <section class="journal" id="journal"><div class="wrap">
@@ -847,11 +891,8 @@ function tick(){
 tick(); setInterval(tick, 15000);
 
 /* ---- menu ---- */
-const menu=$('#menu'), mb=$('#menuBtn');
-function openMenu(){ menu.classList.add('open'); mb.setAttribute('aria-expanded','true'); setTimeout(()=>$('#menuClose').focus(),50); document.querySelectorAll('.menu nav a').forEach((a,i)=>a.style.transitionDelay=(reduce?0:250+i*40)+'ms'); }
-function closeMenu(){ if(!menu.classList.contains('open'))return; menu.classList.remove('open'); mb.setAttribute('aria-expanded','false'); document.querySelectorAll('.menu nav a').forEach(a=>a.style.transitionDelay='0ms'); mb.focus(); }
-mb.onclick=openMenu; $('#menuClose').onclick=closeMenu;
-menu.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',closeMenu));
+const menu=$('#mmenu');
+function closeMenu(){ menu.classList.remove('open'); }
 
 /* ---- copy buttons ---- */
 document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
@@ -870,7 +911,7 @@ paintRooms(cur2);
    Motion engine: Lenis (smooth scroll) + GSAP ScrollTrigger.
    Every duration and curve lives in M, so the whole site keeps one rhythm.
    ===================================================================== */
-const hdr=$('#hdr'), loader=$('#loader'), pin=$('.pin'), pill=$('#menuBtn');
+const hdr=$('#hdr'), loader=$('#loader'), pin=$('.pin'), pill=$('.hdr .logo');
 const mtr=$('#mtr'), sty=$('#sty'), marker=$('#marker');
 const PX_TO_M = 0.0254/96; // one CSS pixel is 1/96 inch
 const G = window.gsap, ST = window.ScrollTrigger;
@@ -1009,7 +1050,7 @@ if(!calm){
     onEnter:b=>G.to(b,{ opacity:1, y:0, filter:'blur(0px)', duration:M.text.dur, stagger:M.text.stagger, ease:EASE.settle, overwrite:true }) });
 
   /* ---- photos unmask upward while the image inside settles ---- */
-  G.utils.toArray('.card .ph, .planwrap .drawing, .planwrap .view .ph').forEach(el=>{
+  G.utils.toArray('.card .ph, .planwrap .drawing, .planwrap .view .ph, .notepic').forEach(el=>{
     const img=el.querySelector('.img');
     G.set(el,{ clipPath:'inset(100% 0% 0% 0%)' }); if(img) G.set(img,{ scale:M.mask.zoomFrom });
     ST.create({ trigger:el, start:'top 90%', once:true, onEnter:()=>{
@@ -1017,6 +1058,13 @@ if(!calm){
       if(img) G.to(img,{ scale:1, duration:M.mask.zoomDur, ease:EASE.settle });
     }});
   });
+
+  /* ---- note: drops in with its clip, then the line is written across ---- */
+  G.set('#noteCard',{ y:60, rotate:-6, opacity:0 }); G.set('#noteCard .clip',{ y:-24, opacity:0 }); G.set('#noteHand',{ clipPath:'inset(0% 100% 0% 0%)' });
+  ST.create({ trigger:'#noteCard', start:'top 85%', once:true, onEnter:()=>G.timeline()
+    .to('#noteCard',{ y:0, rotate:-1.5, opacity:1, duration:1.2, ease:EASE.settle })
+    .to('#noteCard .clip',{ y:0, opacity:1, duration:0.7, ease:EASE.settle },0.5)
+    .to('#noteHand',{ clipPath:'inset(0% 0% 0% 0%)', duration:1.8, ease:'power1.inOut' },0.9) });
 
   /* ---- photo curtain drifts slower than the page ---- */
   G.fromTo(cph,{ yPercent:-M.curtain.drift },{ yPercent:M.curtain.drift, ease:'none',
@@ -1033,29 +1081,33 @@ addEventListener('load',()=>ST.refresh());
 if(calm){ loader.classList.add('done'); heroPane.classList.add('in'); status('off (Reduce motion is turned on in your system settings)'); }
 else {
   status('on'); lenis.stop(); if(own) scroller.scrollTop=0; else scrollTo(0,0);
-  const L = M.loader, rows=loader.querySelectorAll('.row'), rests=loader.querySelectorAll('.rest'), lw=loader.querySelector('.lw');
-  const w=Math.min(innerWidth*.26,240), h=Math.min(innerWidth*.38,340);
-  const iy=Math.max(0,(innerHeight-h)/2), ix=Math.max(0,(innerWidth-w)/2);
-  G.set(rows,{ opacity:0, y:8 }); G.set(loader.querySelector('.in'),{ opacity:0 });
-  // The window is animated edge by edge: a symmetric inset() collapses to two values in the browser,
-  // and tweening that string makes the box jump to a corner instead of growing from the centre.
-  const win={ y:iy, x:ix }, paintWin=()=>{ pin.style.clipPath=`inset(${win.y.toFixed(1)}px ${win.x.toFixed(1)}px ${win.y.toFixed(1)}px ${win.x.toFixed(1)}px)`; };
-  paintWin();
+  // 1) hairlines draw in  2) each opens out into its letter  3) photos gather round the word
+  // 4) the dusk photo (same image as the hero) grows from its own frame to full bleed and becomes the hero.
+  const stems=loader.querySelectorAll('.ldword i'), glyphs=loader.querySelectorAll('.ldword b'), pics=[...loader.querySelectorAll('.ldpic')], heroPic=$('#ldHero');
+  G.set(stems,{ scaleY:0 }); G.set(glyphs,{ clipPath:'inset(0% 50% 0% 50%)' }); G.set(pics,{ opacity:0, scale:.9, y:24 });
+  const win={ t:0, r:0, b:0, l:0 }, paintWin=()=>{ pin.style.clipPath=`inset(${win.t.toFixed(1)}px ${win.r.toFixed(1)}px ${win.b.toFixed(1)}px ${win.l.toFixed(1)}px)`; };
   G.timeline({ defaults:{ ease:EASE.settle } })
-    .to(rows,{ opacity:1, y:0, duration:0.5, stagger:L.letter }, 0.3)
-    .to(rests,{ maxWidth:'6em', duration:0.8, ease:EASE.door }, L.words)
-    .to(loader.querySelector('.in'),{ opacity:1, duration:0.5 }, L.words)
-    .to(loader.querySelector('.in i'),{ width:48, duration:0.7, ease:EASE.door }, L.words)
-    .to(lw,{ color:'#6a6a6a', duration:0.6, ease:'none' }, L.grey)
-    .to(loader,{ backgroundColor:'rgba(17,17,17,0)', duration:0.5, ease:'none' }, L.open)
-    .to(lw,{ opacity:0, duration:0.4, ease:'none' }, L.open)
-    .to(win,{ y:14, x:14, duration:1.1, ease:EASE.door, onUpdate:paintWin }, L.grow)
-    .to(win,{ y:0, x:0, duration:0.6, onUpdate:paintWin }, L.full)
-    .add(()=>heroPane.classList.add('in'), L.full)
-    .add(()=>{ loader.classList.add('done'); pin.style.clipPath=''; lenis.start(); ST.refresh(); }, L.done)
-    .fromTo(pill,{ rotateY:0 },{ rotateY:360, transformPerspective:2400, duration:0.9, ease:EASE.door }, L.done);
+    .to(stems,{ scaleY:1, duration:0.6, stagger:0.06, ease:EASE.door }, 0.2)
+    .to(glyphs,{ clipPath:'inset(0% 0% 0% 0%)', duration:0.9, stagger:0.05, ease:EASE.door }, 0.9)
+    .to(stems,{ opacity:0, duration:0.4, ease:'none' }, 1.3)
+    .to(pics,{ opacity:1, scale:1, y:0, duration:0.8, stagger:0.12 }, 1.9)
+    .add(()=>{ const r=heroPic.getBoundingClientRect(); Object.assign(win,{ t:r.top, r:innerWidth-r.right, b:innerHeight-r.bottom, l:r.left }); paintWin(); }, 3.3)
+    .to(loader,{ backgroundColor:'rgba(255,255,255,0)', duration:0.3, ease:'none' }, 3.35)
+    .set(heroPic,{ opacity:0 }, 3.4)
+    .to([...pics.filter(x=>x!==heroPic), '#ldword'],{ opacity:0, y:-16, duration:0.5, ease:'none' }, 3.35)
+    .to(win,{ t:0, r:0, b:0, l:0, duration:1.1, ease:EASE.door, onUpdate:paintWin }, 3.45)
+    .add(()=>heroPane.classList.add('in'), 3.9)
+    .add(()=>{ loader.classList.add('done'); pin.style.clipPath=''; lenis.start(); ST.refresh(); }, 4.6)
+    .fromTo(pill,{ rotateY:0 },{ rotateY:360, transformPerspective:2400, duration:0.9, ease:EASE.door }, 4.6);
 }
 })();
+
+/* phone menu */
+(function(){ const m=document.getElementById('mmenu'), b=document.getElementById('mBtn'), x=document.getElementById('mClose');
+  const set=o=>{ m.classList.toggle('open',o); b.setAttribute('aria-expanded',o); };
+  b.onclick=()=>set(true); x.onclick=()=>set(false);
+  m.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>set(false)));
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') set(false); }); })();
 </script>
 
 </body></html>

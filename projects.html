@@ -166,6 +166,28 @@ img{display:block;max-width:100%}
 .close .row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-top:max(56px,5vw);font-size:var(--fs-small);color:rgba(255,255,255,.7)}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.2s!important}.ld{display:none}}
+
+/* ---------- header (Storey layout): logo left, three links centred, Contact on the right ---------- */
+.hdr .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-block:max(14px,1.2vw)}
+.hdr .logo{justify-self:start;display:inline-flex;align-items:center;gap:.2em;font-size:max(22px,1.75vw);font-weight:500;letter-spacing:-.045em;line-height:1;color:inherit;pointer-events:auto}
+.hdr .logo .bar{display:inline-block;width:1.5px;height:.78em;background:currentColor}
+.mainnav{display:flex;gap:max(18px,1.4vw);font-size:max(15px,1.1vw);pointer-events:auto}
+.hright{justify-self:end;display:flex;gap:8px;align-items:center;pointer-events:auto}
+.cta{display:inline-flex;align-items:center;gap:max(28px,2.6vw);background:#0A0A0A;color:#fff;padding:.78em .85em .78em 1.1em;font-size:max(15px,1.1vw);line-height:1;transition:background .4s,color .4s}
+.cta .dots{width:1.35em;height:1.35em;fill:currentColor;transition:transform 1.2s cubic-bezier(.2,.7,.1,1)}
+.cta:hover .dots{transform:rotate(180deg)}
+.mbtn{display:none;align-items:center;border:1px solid currentColor;padding:.72em .95em;font:inherit;font-size:14px;line-height:1;color:inherit;background:none;cursor:pointer}
+.hdr.on-dark,.hdr.dark{color:#fff}
+.hdr.on-dark .cta,.hdr.dark .cta{background:#fff;color:#0A0A0A}
+@media (max-width:760px){.mainnav{display:none}.mbtn{display:inline-flex}.hdr .wrap{grid-template-columns:1fr auto}.cta{gap:12px;font-size:14px;padding:.72em .8em .72em 1em}.hdr .logo{font-size:22px}}
+/* phone menu: the same three links */
+.mmenu{position:fixed;inset:0;z-index:70;background:#0A0A0A;color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:max(16px,3.9vw);clip-path:inset(0 0 100% 0);transition:clip-path .7s cubic-bezier(.7,0,.2,1);visibility:hidden}
+.mmenu.open{clip-path:inset(0 0 0 0);visibility:visible}
+.mmenu .row{display:flex;justify-content:space-between;align-items:center}
+.mmenu nav{display:grid;gap:4px}
+.mmenu nav a{font-size:max(44px,5vw);letter-spacing:-.045em;line-height:1.05}
+.mmenu .x{border:1px solid #fff;color:#fff;background:none;font:inherit;font-size:14px;padding:.72em .95em;cursor:pointer}
+.mmenu .meta{font-size:13px;color:rgba(255,255,255,.65);display:grid;gap:4px}
 </style>
 </head>
 <body>
@@ -177,11 +199,16 @@ img{display:block;max-width:100%}
 
 <header class="hdr" id="hdr">
   <div class="wrap">
-    <a class="side ulink" href="index.html">← Home</a>
-    <a class="pill mark" href="index.html" aria-label="Space-in home">Space<i></i>in</a>
-    <a class="side r ulink" href="index.html#talk">Let's talk</a>
+    <a class="logo" href="index.html" aria-label="Space-in home">Space<span class="bar"></span>in</a>
+    <nav class="mainnav" aria-label="Main"><a class="ulink" href="projects.html">Projects</a><a class="ulink" href="index.html#intro">Studio</a><a class="ulink" href="index.html#journal">Journal</a></nav>
+    <div class="hright"><a class="cta" href="index.html#talk">Contact <svg class="dots" viewBox="0 0 24 24" aria-hidden="true"><circle cx="21.00" cy="12.00" r="1.10"/><circle cx="18.36" cy="18.36" r="1.32"/><circle cx="12.00" cy="21.00" r="1.54"/><circle cx="5.64" cy="18.36" r="1.76"/><circle cx="3.00" cy="12.00" r="1.98"/><circle cx="5.64" cy="5.64" r="2.20"/><circle cx="12.00" cy="3.00" r="2.42"/><circle cx="18.36" cy="5.64" r="2.64"/></svg></a><button class="mbtn" id="mBtn" aria-expanded="false" aria-controls="mmenu">Menu</button></div>
   </div>
 </header>
+<div class="mmenu" id="mmenu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="row"><span class="logo" style="font-size:22px;font-weight:500;letter-spacing:-.045em">Space | in</span><button class="x" id="mClose">Close</button></div>
+  <nav><a href="projects.html">Projects</a><a href="index.html#intro">Studio</a><a href="index.html#journal">Journal</a><a href="index.html#talk">Contact</a></nav>
+  <div class="meta"><span>studio@space-in.example</span><span>+91 731 000 0000 · Indore</span></div>
+</div>
 
 <div id="scroller"><div id="content">
 
@@ -404,6 +431,13 @@ G.timeline()
   .to('.herocopy > *, .herofoot > *',{ opacity:1, y:0, duration:0.9, stagger:0.08, ease:EASE.settle },2.8);
 addEventListener('load',()=>ST.refresh());
 })();
+
+/* phone menu */
+(function(){ const m=document.getElementById('mmenu'), b=document.getElementById('mBtn'), x=document.getElementById('mClose');
+  const set=o=>{ m.classList.toggle('open',o); b.setAttribute('aria-expanded',o); };
+  b.onclick=()=>set(true); x.onclick=()=>set(false);
+  m.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>set(false)));
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') set(false); }); })();
 </script>
 </body>
 </html>
