@@ -21,7 +21,7 @@
   --fs-s:max(18px,1.4vw); --fs-body:max(16px,1.1vw); --fs-small:max(13px,.865vw); --fs-label:max(11.5px,.68vw); /* same √φ scale as the homepage */
   color-scheme:light;
 }
-@media (max-width:640px){:root{--m:16px;--pic:46vw;--fs-mega:25vw}} /* phones: photo and line scaled up so the hero still reads */
+@media (max-width:640px){:root{--m:16px;--pic:46vw;--fs-mega:17vw}} /* phones: photo and line scaled up so the hero still reads */
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden}
 body{background:var(--white);color:var(--ink);font:400 var(--fs-body)/1.6 var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
@@ -100,6 +100,14 @@ img{display:block;max-width:100%}
 .stage.flat .scard{flex:1 1 calc(50% - 14px);height:auto;aspect-ratio:1/1.618}
 .stage.flat .scard h2{font-size:max(26px,7vw)}
 @media (min-width:900px){.stage.flat .scard{flex:1 1 0;height:60vh}}
+/* Phones: the five sector cards swipe sideways, each 1 : φ */
+@media (max-width:640px){
+  .stage.flat .cards{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;justify-content:flex-start;padding:40px 16px 48px;scrollbar-width:none}
+  .stage.flat .cards::-webkit-scrollbar{display:none}
+  .stage.flat .scard{flex:0 0 62vw;height:calc(62vw * 1.618);aspect-ratio:auto;scroll-snap-align:start}
+  .pill{font-size:14px;padding:.5em 1em}
+  .lhead h2{font-size:40px}
+}
 
 /* ---------- project list ---------- */
 .list{padding-block:max(96px,8vw)}

@@ -337,6 +337,40 @@ section{scroll-margin-top:80px}
 @media (max-width:900px){.curtain .wrap{grid-template-columns:1fr;column-gap:0}.curtain .col1,.curtain .col2{grid-column:1/-1}}
 @media (max-width:700px){.curtain{height:auto;min-height:100svh}.curtain .wrap{padding-block:96px 72px}.curtain .col1,.curtain .col2{grid-column:1/-1;margin-bottom:28px}}
 
+/* ============ Phone layout (≤640px): rethought for a thumb, not a shrunk desktop ============ */
+.swipehint{display:none}
+@media (max-width:640px){
+  /* header: a smaller pill so the top bar breathes */
+  .pill{font-size:14px;padding:.5em .95em .5em 1.05em;gap:8px}
+  .arrowc{width:34px;height:34px}
+  /* hero: one clear message; the three-part middle row is desktop-only */
+  .hero .meta.top{display:none}
+  .stage.flat .hero{height:86svh;min-height:560px}
+  /* focus: a swipeable row of cards instead of five stacked screens (card 1 : φ, photo 61.8%) */
+  .swipehint{display:flex;justify-content:space-between;padding-block:40px 14px;font-size:13px;color:var(--muted);background:var(--plaster)}
+  .stage.flat{background:var(--plaster)}
+  .stage.flat .track{flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;padding:0 16px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .stage.flat .track::-webkit-scrollbar{display:none}
+  .stage.flat .panel{flex:0 0 78vw;width:78vw;height:calc(78vw * 1.618);scroll-snap-align:start}
+  .stage.flat .panel .ph{flex:0 0 61.8%;height:auto}
+  .stage.flat .panel .blk{flex:1;height:auto;padding:18px}
+  .stage.flat .panel .subs{display:none}
+  .stage.flat .panel .plus{top:calc(61.8% + 18px);right:18px}
+  .stage.flat .panel h3{font-size:28px}
+  /* process: swipe through the five cards, same φ card as desktop */
+  .process .cards-vp{overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(var(--m) * -1);padding-inline:var(--m);scrollbar-width:none}
+  .process .cards-vp::-webkit-scrollbar{display:none}
+  .process:not(.pinned) .cards{flex-wrap:nowrap}
+  .process:not(.pinned) .pcard{--w:78vw;flex:0 0 var(--w);scroll-snap-align:start}
+  .pcard .top h3{font-size:24px}
+  /* floor plan: room names readable at phone size */
+  .plan text{font-size:17px}
+  .plan text.scale{font-size:13px}
+  .planwrap .drawing{padding:12px}
+  /* statements and sections: tighter rhythm */
+  .statement.big{font-size:40px}
+  .featured{min-height:560px;height:88svh}
+}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.2s!important;transition-delay:0s!important;animation:none!important}
   .hero .shot .img,.slide .img{transform:none!important}
@@ -403,6 +437,7 @@ section{scroll-margin-top:80px}
       </div></div>
     </div>
     <div class="veil" id="veil"></div>
+    <div class="swipehint wrap" aria-hidden="true"><span>Our focus</span><span>Swipe →</span></div>
     <div class="track" id="track"></div>
   </div>
 </section>
@@ -716,7 +751,7 @@ const rooms = [
   {id:'court', x:170,y:150,w:180,h:140, n:'Courtyard', note:'Open to the sky. 9.6 × 7.2 m, paved in Kota stone.', tone:'#7a6a5a'},
   {id:'living', x:40,y:150,w:130,h:140, n:'Living room', note:'Double height, with a jaali screen to the west.', tone:'#6d5b4d'},
   {id:'kitchen', x:350,y:150,w:130,h:140, n:'Kitchen', note:'Morning light from the east over the prep counter.', tone:'#806a55'},
-  {id:'bed1', x:40,y:40,w:130,h:110, n:'Grandparents’ room', note:'Ground floor, step-free, facing the court.', tone:'#6a5e55'},
+  {id:'bed1', x:40,y:40,w:130,h:110, n:'Elders’ room', note:'Ground floor, step-free, facing the court.', tone:'#6a5e55'},
   {id:'study', x:170,y:40,w:180,h:110, n:'Study', note:'North light only. Shelves in teak, 3.2 m high.', tone:'#5f5850'},
   {id:'dining', x:350,y:40,w:130,h:110, n:'Dining', note:'Seats twelve. Opens to the court on two sides.', tone:'#7b6452'},
   {id:'entry', x:40,y:290,w:220,h:110, n:'Entrance verandah', note:'A deep shaded threshold, 2.4 m from the street.', tone:'#75685b'},
